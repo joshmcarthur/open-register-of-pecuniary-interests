@@ -1,0 +1,59 @@
+<div class="container py-4">
+  <div class="hero-section mw-lg-75 text-center mx-auto my-4">
+    <hgroup class="mb-4">
+      <h1 class="mb-1">Open Register of Penuciary Interests</h1>
+      <p>A simple way to see what companies, properties and investments your elected officials have declared</p>
+    </hgroup>
+
+
+    <%= form_with url: search_path, method: :get, html: { role: "search" } do |f| %>
+      <%= f.search_field :query, placeholder: "Search by MP name, electorate, company, or interest type..." %>
+      <%= f.submit "Search" %>
+    <% end %>
+
+
+  </div>
+
+  <section class="orpi-background-amber-50 p-1 rounded">
+      <small class="px-lg-4"><strong class="fw-medium">About this data:</strong> Information extracted from official PDF registers using AI (Gemini LLM). Data includes confidence scores and links to original sources.</small>
+  </section>
+
+  <div class="quick-access grid">
+      <article>
+          <header class="orpi-background-slate">Browse Parliament</header>
+          <p>Current MPs and their declared interests</p>
+      </article>
+      <article>
+          <header class="orpi-background-slate">Search by Interest</header>
+          <p>Find who has stakes in specific companies</p>
+      </article>
+      <article>
+          <header class="orpi-background-slate">Compare Parties</header>
+          <p>Aggregate analysis across political parties</p>
+      </article>
+       <article style="opacity: 0.5;">
+          <header class="orpi-background-slate">Browse Councils</header>
+          <p>Local government representatives</p>
+          <strong>Coming soon!</strong>
+      </article>
+  </div>
+
+  <div class="grid">
+      <article class="text-center">
+          <h3 >120</h3>
+          <footer class="text-center orpi-background-slate-50">Current MPs</footer>
+      </article>
+      <article class="text-center">
+          <h3 >1,847</h3>
+          <footer class="text-center orpi-background-slate-50">Council Members</footer>
+      </article>
+      <article class="text-center">
+          <h3 >3,241</h3>
+          <footer class="text-center orpi-background-slate-50">Declared Interests</footer>
+      </article>
+      <article class="text-center">
+          <h3 >2024</h3>
+          <footer class="text-center orpi-background-slate-50">Latest Data</footer>
+      </article>
+  </div>
+</div>

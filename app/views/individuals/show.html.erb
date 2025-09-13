@@ -1,0 +1,43 @@
+<%= render "application/navbar" %>
+<main class="container border-bottom">
+  <%= render "details" %>
+
+  <!-- CSS-only Tab Example -->
+  <div class="tabs">
+    <input type="radio" id="tab-overview" name="tabs" class="tab" checked>
+    <label for="tab-overview" class="tab-label">Overview</label>
+    <div class="tab-content">
+      <h3>Overview</h3>
+      <p>This is the overview content. It shows general information about the individual.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    </div>
+
+    <input type="radio" id="tab-details" name="tabs" class="tab">
+    <label for="tab-details" class="tab-label">Details</label>
+    <div class="tab-content">
+      <h3>Detailed Information</h3>
+      <p>This tab contains more detailed information about the individual.</p>
+      <ul>
+        <li>Detailed item 1</li>
+        <li>Detailed item 2</li>
+        <li>Detailed item 3</li>
+      </ul>
+    </div>
+
+    <input type="radio" id="tab-history" name="tabs" class="tab">
+    <label for="tab-history" class="tab-label">History</label>
+    <div class="tab-content">
+      <h3>Historical Data</h3>
+      <p>This tab shows historical information and timeline data.</p>
+      <div class="timeline">
+        <div class="timeline-item">
+          <strong>2023:</strong> Important event occurred
+        </div>
+        <div class="timeline-item">
+          <strong>2022:</strong> Another significant milestone
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
