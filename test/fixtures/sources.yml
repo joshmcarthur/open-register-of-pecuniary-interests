@@ -1,0 +1,11 @@
+register_2025:
+  name: Register of Pecuniary Interests 2025
+  year: 2025
+  description: Annual register of pecuniary interests for New Zealand politicians
+  metadata: {"version": "1.0", "published_date": "2025-01-01"}
+
+register_2024:
+  name: Register of Pecuniary Interests 2024
+  year: 2024
+  description: Annual register of pecuniary interests for New Zealand politicians
+  metadata: {"version": "1.0", "published_date": "2024-01-01"}

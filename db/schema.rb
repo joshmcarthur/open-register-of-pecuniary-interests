@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_12_020046) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_13_215034) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -44,6 +44,36 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_12_020046) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["model_id"], name: "index_chats_on_model_id"
+  end
+
+  create_table "interest_categories", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "label", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["key"], name: "index_interest_categories_on_key", unique: true
+  end
+
+  create_table "interests", force: :cascade do |t|
+    t.text "description", null: false
+    t.integer "interest_category_id", null: false
+    t.integer "political_entity_jurisdiction_id", null: false
+    t.integer "source_id", null: false
+    t.text "source_page_numbers", default: "[]"
+    t.json "metadata", default: {}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["interest_category_id"], name: "index_interests_on_interest_category_id"
+    t.index ["political_entity_jurisdiction_id"], name: "index_interests_on_political_entity_jurisdiction_id"
+    t.index ["source_id"], name: "index_interests_on_source_id"
+  end
+
+  create_table "jurisdictions", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "jurisdiction_type", null: false
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "messages", force: :cascade do |t|
@@ -82,6 +112,38 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_12_020046) do
     t.index ["provider"], name: "index_models_on_provider"
   end
 
+  create_table "political_entities", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_political_entities_on_name", unique: true
+  end
+
+  create_table "political_entity_jurisdictions", force: :cascade do |t|
+    t.integer "political_entity_id", null: false
+    t.integer "jurisdiction_id", null: false
+    t.string "role", null: false
+    t.string "electorate"
+    t.string "affiliation"
+    t.date "start_date"
+    t.date "end_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["jurisdiction_id"], name: "index_political_entity_jurisdictions_on_jurisdiction_id"
+    t.index ["political_entity_id"], name: "index_political_entity_jurisdictions_on_political_entity_id"
+  end
+
+  create_table "sources", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "year", null: false
+    t.json "metadata"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_sources_on_name", unique: true
+  end
+
   create_table "tool_calls", force: :cascade do |t|
     t.integer "message_id", null: false
     t.string "tool_call_id", null: false
@@ -97,8 +159,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_12_020046) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "chats", "models"
+  add_foreign_key "interests", "interest_categories"
+  add_foreign_key "interests", "political_entity_jurisdictions"
+  add_foreign_key "interests", "sources"
   add_foreign_key "messages", "chats"
   add_foreign_key "messages", "models"
   add_foreign_key "messages", "tool_calls"
+  add_foreign_key "political_entity_jurisdictions", "jurisdictions"
+  add_foreign_key "political_entity_jurisdictions", "political_entities"
   add_foreign_key "tool_calls", "messages"
 end

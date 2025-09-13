@@ -1,0 +1,19 @@
+nz_parliament:
+  name: NZ Parliament
+  jurisdiction_type: parliament
+  description: The national parliament of New Zealand
+
+auckland_council:
+  name: Auckland Council
+  jurisdiction_type: local_council
+  description: The local government authority for Auckland
+
+wellington_council:
+  name: Wellington City Council
+  jurisdiction_type: local_council
+  description: The local government authority for Wellington
+
+canterbury_regional:
+  name: Canterbury Regional Council
+  jurisdiction_type: regional_council
+  description: The regional council for Canterbury

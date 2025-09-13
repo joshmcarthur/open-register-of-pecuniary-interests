@@ -1,0 +1,15 @@
+john_smith:
+  name: John Smith
+  description: Member of Parliament for Auckland Central
+
+jane_doe:
+  name: Jane Doe
+  description: Councillor for Wellington City
+
+bob_wilson:
+  name: Bob Wilson
+  description: Regional councillor for Canterbury
+
+alice_brown:
+  name: Alice Brown
+  description: Member of Parliament for Christchurch East

@@ -1,0 +1,39 @@
+john_smith_company:
+  description: Director of Smith Holdings Ltd
+  interest_category: company_directorships_and_controlling_interests
+  political_entity_jurisdiction: john_smith_parliament
+  source: register_2025
+  source_page_numbers: '[1, 2]'
+  metadata: {"company_number": "123456", "appointment_date": "2020-01-15"}
+
+john_smith_property:
+  description: Residential property at 123 Queen Street, Auckland
+  interest_category: real_property
+  political_entity_jurisdiction: john_smith_parliament
+  source: register_2025
+  source_page_numbers: '[3]'
+  metadata: {"property_type": "residential", "purchase_date": "2018-05-20"}
+
+jane_doe_employment:
+  description: Part-time consultant for Environmental Solutions Ltd
+  interest_category: employment
+  political_entity_jurisdiction: jane_doe_wellington
+  source: register_2025
+  source_page_numbers: '[5]'
+  metadata: {"employment_type": "part_time", "start_date": "2023-03-01"}
+
+bob_wilson_trust:
+  description: Trustee of Wilson Family Trust
+  interest_category: trusts
+  political_entity_jurisdiction: bob_wilson_canterbury
+  source: register_2025
+  source_page_numbers: '[7, 8]'
+  metadata: {"trust_type": "family", "established_date": "2015-12-01"}
+
+alice_brown_gift:
+  description: Gift of artwork valued at $500 from local artist
+  interest_category: gifts
+  political_entity_jurisdiction: alice_brown_parliament
+  source: register_2025
+  source_page_numbers: '[10]'
+  metadata: {"gift_type": "artwork", "received_date": "2024-11-15", "estimated_value": 500}

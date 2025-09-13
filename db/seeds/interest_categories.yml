@@ -1,0 +1,28 @@
+- key: company_directorships_and_controlling_interests
+  label: Company directorships and controlling interests
+- key: other_companies_and_business_entities
+  label: Other companies and business entities
+- key: employment
+  label: Employment
+- key: trusts
+  label: Beneficial interests in, and trusteeships of, trusts
+- key: organisations_seeking_government_funding
+  label: Organisations and trusts seeking Government funding
+- key: real_property
+  label: Real property
+- key: retirement_schemes
+  label: Retirement schemes
+- key: managed_investment_schemes
+  label: Managed investment schemes
+- key: debts_owed_to_you
+  label: Debts owed to you
+- key: debts_owed_by_you
+  label: Debts owed by you
+- key: overseas_travel
+  label: Overseas travel
+- key: gifts
+  label: Gifts
+- key: discharged_debts
+  label: Discharged debts
+- key: payments_for_activities
+  label: Payments for activities
