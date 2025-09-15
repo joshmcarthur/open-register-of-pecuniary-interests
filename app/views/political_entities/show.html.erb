@@ -1,0 +1,259 @@
+<% content_for :title, "#{@political_entity.name} - Political Entity" %>
+
+<%= render "application/navbar" %>
+
+<div class="container py-12 mx-auto px-4 sm:px-6 lg:px-8">
+  <!-- Header Section -->
+  <div class="hero min-h-[500px] bg-gradient-to-br from-primary/10 via-base-200 to-secondary/10 rounded-2xl shadow-2xl mb-12">
+      <div class="hero-content w-full flex flex-col justify-between h-full">
+        <!-- Entity Info -->
+        <div class="flex flex-col lg:flex-row items-center justify-between gap-8 w-full flex-1">
+          <div class="flex-1 text-center lg:text-left">
+            <h1 class="text-5xl font-bold mb-4 text-base-content"><%= @political_entity.name %></h1>
+            <% if @political_entity.description.present? %>
+              <p class="text-xl text-base-content/80 mb-6 leading-relaxed"><%= @political_entity.description %></p>
+            <% end %>
+
+            <!-- Jurisdictions -->
+            <% if @political_entity.jurisdictions.any? %>
+              <div class="flex flex-wrap justify-center lg:justify-start gap-3 mb-6">
+                <% @political_entity.jurisdictions.each do |jurisdiction| %>
+                  <% pej = @political_entity.political_entity_jurisdictions.find_by(jurisdiction: jurisdiction) %>
+                  <div class="badge badge-primary badge-lg">
+                    <%= jurisdiction.name %>
+                    <% if pej&.role.present? %>
+                      <span class="ml-1 text-xs opacity-75">(<%= pej.role %>)</span>
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+
+          <!-- Interest Count Summary -->
+          <div class="stats stats-vertical sm:stats-horizontal shadow-lg bg-base-100 border border-base-300 rounded-2xl">
+            <div class="stat">
+              <div class="stat-figure text-primary">
+                <%= render 'shared/icons/chart', class: 'inline-block w-8 h-8 stroke-current' %>
+              </div>
+              <div class="stat-title">Total Interests</div>
+              <div class="stat-value text-primary"><%= @political_entity.interests.count %></div>
+              <div class="stat-desc">Declared interests</div>
+            </div>
+            <div class="stat">
+              <div class="stat-figure text-secondary">
+                <%= render 'shared/icons/building', class: 'inline-block w-8 h-8 stroke-current' %>
+              </div>
+              <div class="stat-title">Categories</div>
+              <div class="stat-value text-secondary"><%= @interest_categories.count %></div>
+              <div class="stat-desc">Interest types</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="mt-8">
+          <h3 class="text-lg font-semibold text-center mb-4 text-base-content">Browse Interests by Category</h3>
+          <div class="tabs tabs-boxed bg-base-100/80 backdrop-blur-sm border border-base-300 rounded-2xl p-4 shadow-lg justify-center">
+            <%= link_to political_entity_path(@political_entity, tab: 'all'),
+                class: "tab #{'tab-active' if @active_tab == 'all'} font-semibold" do %>
+              All Interests
+              <span class="badge badge-sm ml-2 #{'badge-primary' if @active_tab == 'all'} #{'badge-outline' unless @active_tab == 'all'}"><%= @political_entity.interests.count %></span>
+            <% end %>
+
+            <% @interest_categories.each do |category| %>
+              <% category_count = @political_entity.interests.joins(:interest_category).where(interest_categories: { key: category.key }).count %>
+              <%= link_to political_entity_path(@political_entity, tab: category.key),
+                  class: "tab #{'tab-active' if @active_tab == category.key}" do %>
+                <%= category.label %>
+                <span class="badge badge-sm ml-2 #{'badge-primary' if @active_tab == category.key} #{'badge-outline' unless @active_tab == category.key}"><%= category_count %></span>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+    </div>
+  </div>
+
+  <!-- Interests Content -->
+  <div class="space-y-6">
+    <% if @interests.any? %>
+      <% if @active_tab == 'all' %>
+        <!-- Group by category when showing all -->
+        <% @interests.group_by(&:interest_category).each do |category, interests| %>
+          <div class="card bg-base-100 shadow-xl border border-base-300">
+            <div class="card-body">
+              <h2 class="card-title text-2xl mb-6">
+                <%= category.label %>
+                <span class="badge badge-primary badge-lg"><%= interests.count %></span>
+              </h2>
+
+              <div class="grid gap-4">
+                <% interests.each do |interest| %>
+                  <div class="card bg-base-100 shadow-sm border border-base-300 hover:shadow-md transition-shadow">
+                    <div class="card-body p-6">
+                      <!-- Main content -->
+                      <div class="flex justify-between items-start mb-4">
+                        <div class="flex-1">
+                          <p class="text-lg leading-relaxed text-base-content font-medium"><%= interest.description %></p>
+                        </div>
+                        <div class="dropdown dropdown-end ml-4">
+                          <div tabindex="0" role="button" class="btn btn-ghost btn-sm btn-circle">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-5 h-5 stroke-current">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01"></path>
+                            </svg>
+                          </div>
+                          <ul tabindex="0" class="dropdown-content z-[1] menu p-3 shadow-lg bg-base-100 rounded-box w-64 border border-base-300">
+                            <li class="menu-title">
+                              <span>Source Information</span>
+                            </li>
+                            <li><span class="text-sm">Source: <%= interest.source.name %></span></li>
+                            <% if interest.source_page_numbers.present? && interest.source_page_numbers != "[]" %>
+                              <li><span class="text-sm">Pages: <%= interest.source_page_numbers %></span></li>
+                            <% end %>
+                            <li><span class="text-sm">Jurisdiction: <%= interest.jurisdiction.name %></span></li>
+                            <% if interest.metadata.present? && interest.metadata.any? %>
+                              <li class="menu-title">
+                                <span>Additional Data</span>
+                              </li>
+                              <% interest.metadata.each do |key, value| %>
+                                <li><span class="text-sm"><%= key.humanize %>: <%= value %></span></li>
+                              <% end %>
+                            <% end %>
+                          </ul>
+                        </div>
+                      </div>
+
+                      <!-- Source and metadata info -->
+                      <div class="flex flex-wrap gap-2">
+                        <div class="badge badge-primary badge-sm">
+                          <%= interest.source.name %>
+                          <% if interest.source.year.present? %>
+                            (<%= interest.source.year %>)
+                          <% end %>
+                        </div>
+                        <% if interest.source_page_numbers.present? && interest.source_page_numbers != "[]" %>
+                          <div class="badge badge-secondary badge-sm">
+                            Pages: <%= interest.source_page_numbers %>
+                          </div>
+                        <% end %>
+                        <% if interest.metadata.present? && interest.metadata.any? %>
+                          <div class="badge badge-accent badge-sm">
+                            Additional Data
+                          </div>
+                        <% end %>
+                      </div>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <!-- Show interests for specific category -->
+        <div class="card bg-base-100 shadow-xl border border-base-300">
+          <div class="card-body">
+            <h2 class="card-title text-2xl mb-6">
+              <%= @interest_categories.find { |c| c.key == @active_tab }&.label || @active_tab.humanize %>
+              <span class="badge badge-primary badge-lg"><%= @interests.count %></span>
+            </h2>
+
+            <div class="grid gap-4">
+              <% @interests.each do |interest| %>
+                <div class="card bg-base-100 shadow-sm border border-base-300 hover:shadow-md transition-shadow">
+                  <div class="card-body p-6">
+                    <!-- Main content -->
+                    <div class="flex justify-between items-start mb-4">
+                      <div class="flex-1">
+                        <p class="text-lg leading-relaxed text-base-content font-medium"><%= interest.description %></p>
+                      </div>
+                      <div class="dropdown dropdown-end ml-4">
+                        <div tabindex="0" role="button" class="btn btn-ghost btn-sm btn-circle">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-5 h-5 stroke-current">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01"></path>
+                          </svg>
+                        </div>
+                        <ul tabindex="0" class="dropdown-content z-[1] menu p-3 shadow-lg bg-base-100 rounded-box w-64 border border-base-300">
+                          <li class="menu-title">
+                            <span>Source Information</span>
+                          </li>
+                          <li><span class="text-sm">Source: <%= interest.source.name %></span></li>
+                          <% if interest.source_page_numbers.present? && interest.source_page_numbers != "[]" %>
+                            <li><span class="text-sm">Pages: <%= interest.source_page_numbers %></span></li>
+                          <% end %>
+                          <li><span class="text-sm">Jurisdiction: <%= interest.jurisdiction.name %></span></li>
+                          <% if interest.metadata.present? && interest.metadata.any? %>
+                            <li class="menu-title">
+                              <span>Additional Data</span>
+                            </li>
+                            <% interest.metadata.each do |key, value| %>
+                              <li><span class="text-sm"><%= key.humanize %>: <%= value %></span></li>
+                            <% end %>
+                          <% end %>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <!-- Source and metadata info -->
+                    <div class="flex flex-wrap gap-2">
+                      <div class="badge badge-primary badge-sm">
+                        <%= interest.source.name %>
+                        <% if interest.source.year.present? %>
+                          (<%= interest.source.year %>)
+                        <% end %>
+                      </div>
+                      <% if interest.source_page_numbers.present? && interest.source_page_numbers != "[]" %>
+                        <div class="badge badge-secondary badge-sm">
+                          Pages: <%= interest.source_page_numbers %>
+                        </div>
+                      <% end %>
+                      <% if interest.metadata.present? && interest.metadata.any? %>
+                        <div class="badge badge-accent badge-sm">
+                          Additional Data
+                        </div>
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <!-- No interests found -->
+      <div class="card bg-base-100 shadow-xl border border-base-300">
+        <div class="card-body text-center py-12">
+          <h2 class="card-title justify-center text-2xl mb-4">
+            <% if @active_tab == 'all' %>
+              No Interests Found
+            <% else %>
+              No Interests in This Category
+            <% end %>
+          </h2>
+          <p class="text-base-content/70 mb-6 text-lg">
+            <% if @active_tab == 'all' %>
+              This political entity has no recorded interests.
+            <% else %>
+              This political entity has no interests in the selected category.
+            <% end %>
+          </p>
+          <% if @active_tab != 'all' %>
+            <%= link_to "View All Interests", political_entity_path(@political_entity, tab: 'all'),
+                class: "btn btn-primary" %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Export Actions -->
+  <div class="flex justify-center mt-12">
+    <div class="btn-group">
+      <%= link_to "Export CSV", export_political_entity_path(@political_entity),
+          class: "btn btn-outline btn-primary" %>
+      <%= link_to "Back to Search", root_path,
+          class: "btn btn-outline" %>
+    </div>
+  </div>
+</div>
