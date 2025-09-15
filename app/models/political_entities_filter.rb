@@ -53,7 +53,7 @@ class PoliticalEntitiesFilter
   end
 
   def apply_jurisdiction_filter(entities)
-    entities.where(political_entity_jurisdictions: { jurisdiction_id: @jurisdiction_filter })
+    entities.where(jurisdictions: { slug: @jurisdiction_filter })
   end
 
   def apply_party_filter(entities)
@@ -78,7 +78,7 @@ class PoliticalEntitiesFilter
   end
 
   def jurisdiction_label
-    @jurisdictions.find(@jurisdiction_filter)&.name if @jurisdiction_filter.present?
+    @jurisdictions.find { |j| j.slug == @jurisdiction_filter }&.name if @jurisdiction_filter.present?
   end
 
   def interest_category_label
