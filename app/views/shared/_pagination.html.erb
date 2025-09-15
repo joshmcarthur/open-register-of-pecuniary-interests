@@ -1,0 +1,51 @@
+<% if pagination.visible? %>
+  <div class="flex justify-center mt-8">
+    <div class="join">
+      <!-- Previous Page -->
+      <% if pagination.has_previous_page? %>
+        <%= link_to previous_page_url, class: "join-item btn btn-outline" do %>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-4 h-4 stroke-current">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+          Previous
+        <% end %>
+      <% else %>
+        <button class="join-item btn btn-outline btn-disabled">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-4 h-4 stroke-current">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+          Previous
+        </button>
+      <% end %>
+
+      <!-- Page Numbers -->
+      <% pagination.page_numbers.each do |page| %>
+        <% if page[:ellipsis] %>
+          <button class="join-item btn btn-outline btn-disabled">...</button>
+        <% elsif page[:current] %>
+          <button class="join-item btn btn-primary"><%= page[:number] %></button>
+        <% else %>
+          <%= link_to page[:number].to_s, url_for(params.to_unsafe_h.except(:page).merge(page: page[:number])),
+              class: "join-item btn btn-outline" %>
+        <% end %>
+      <% end %>
+
+      <!-- Next Page -->
+      <% if pagination.has_next_page? %>
+        <%= link_to next_page_url, class: "join-item btn btn-outline" do %>
+          Next
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-4 h-4 stroke-current">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        <% end %>
+      <% else %>
+        <button class="join-item btn btn-outline btn-disabled">
+          Next
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-4 h-4 stroke-current">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </button>
+      <% end %>
+    </div>
+  </div>
+<% end %>

@@ -1,12 +1,24 @@
 class InterestsFilter
-  attr_reader :jurisdiction_filter, :party_filter, :interest_category_filter, :interests, :jurisdictions, :parties, :interest_categories
+  PER_PAGE = 12 # Number of interests per page
+
+  attr_reader :jurisdiction_filter, :party_filter, :interest_category_filter, :interests, :jurisdictions, :parties, :interest_categories, :pagination
 
   def initialize(params = {})
     @jurisdiction_filter = params[:jurisdiction]
     @party_filter = params[:party]
     @interest_category_filter = params[:interest_category]
     @source_filter = params[:source]
+    @current_page = [ params[:page].to_i, 1 ].max
 
+    # Calculate total count before pagination
+    @total_count = build_filtered_interests_count
+    @pagination = Pagination.new(
+      current_page: @current_page,
+      total_count: @total_count,
+      per_page: PER_PAGE
+    )
+
+    # Now build the paginated interests
     @interests = build_filtered_interests
     @jurisdictions = load_jurisdictions
     @parties = load_parties
@@ -15,7 +27,7 @@ class InterestsFilter
   end
 
   def filtered_count
-    @interests.count
+    @total_count
   end
 
   def has_active_filters?
@@ -42,7 +54,44 @@ class InterestsFilter
     end
   end
 
+  def pagination_params
+    {
+      jurisdiction: @jurisdiction_filter,
+      party: @party_filter,
+      interest_category: @interest_category_filter,
+      source: @source_filter
+    }.compact
+  end
+
+  # Pagination helper methods
+  def next_page_url
+    return nil unless @pagination.has_next_page?
+    build_url(pagination_params.merge(page: @pagination.next_page))
+  end
+
+  def previous_page_url
+    return nil unless @pagination.has_previous_page?
+    build_url(pagination_params.merge(page: @pagination.previous_page))
+  end
+
+  def page_url(page_number)
+    build_url(pagination_params.merge(page: page_number))
+  end
+
   private
+
+  def build_filtered_interests_count
+    interests = Interest.includes(:interest_category, :source, political_entity_jurisdiction: [ :political_entity, :jurisdiction ])
+                       .joins(political_entity_jurisdiction: [ :political_entity, :jurisdiction ])
+
+    interests = apply_jurisdiction_filter(interests) if @jurisdiction_filter.present?
+    interests = apply_party_filter(interests) if @party_filter.present?
+    interests = apply_interest_category_filter(interests) if @interest_category_filter.present?
+    interests = apply_source_filter(interests) if @source_filter.present?
+
+    # Count without pagination
+    interests.distinct.count
+  end
 
   def build_filtered_interests
     interests = Interest.includes(:interest_category, :source, political_entity_jurisdiction: [ :political_entity, :jurisdiction ])
@@ -52,7 +101,12 @@ class InterestsFilter
     interests = apply_party_filter(interests) if @party_filter.present?
     interests = apply_interest_category_filter(interests) if @interest_category_filter.present?
     interests = apply_source_filter(interests) if @source_filter.present?
+
+    # Apply pagination
+    offset = (@current_page - 1) * PER_PAGE
     interests.distinct.order("interest_categories.label, interests.description")
+             .limit(PER_PAGE)
+             .offset(offset)
   end
 
   def apply_jurisdiction_filter(interests)

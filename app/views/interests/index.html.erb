@@ -32,10 +32,10 @@
         <div class="stats stats-horizontal shadow-lg bg-base-100 border border-base-300 rounded-2xl">
           <div class="stat">
             <div class="stat-figure text-secondary">
-              <%= render 'shared/icons/building', class: 'inline-block w-8 h-8 stroke-current' %>
+              <%= render 'shared/icons/dollar', class: 'inline-block w-8 h-8 stroke-current' %>
             </div>
             <div class="stat-title">Total Interests</div>
-            <div class="stat-value text-secondary"><%= @interests.count %></div>
+            <div class="stat-value text-secondary"><%= @filter.pagination.total_count %></div>
             <div class="stat-desc">Interests found</div>
           </div>
         </div>
@@ -59,7 +59,7 @@
               <span class="label-text font-semibold">Jurisdiction</span>
             </label>
             <%= form.select :jurisdiction,
-                options_from_collection_for_select(@jurisdictions, :id, :name, @jurisdiction_filter),
+                options_from_collection_for_select(@filter.jurisdictions, :id, :name, @filter.jurisdiction_filter),
                 { prompt: "All Jurisdictions" },
                 { class: "select select-bordered w-full" } %>
           </div>
@@ -70,7 +70,7 @@
               <span class="label-text font-semibold">Party</span>
             </label>
             <%= form.select :party,
-                options_for_select([["All Parties", ""]] + @parties.map { |party| [party, party] }, @party_filter),
+                options_for_select([["All Parties", ""]] + @filter.parties.map { |party| [party, party] }, @filter.party_filter),
                 {},
                 { class: "select select-bordered w-full" } %>
           </div>
@@ -81,7 +81,7 @@
               <span class="label-text font-semibold">Interest Category</span>
             </label>
             <%= form.select :interest_category,
-                options_from_collection_for_select(@interest_categories, :key, :label, @interest_category_filter),
+                options_from_collection_for_select(@filter.interest_categories, :key, :label, @filter.interest_category_filter),
                 { prompt: "All Categories" },
                 { class: "select select-bordered w-full" } %>
           </div>
@@ -89,7 +89,7 @@
 
         <!-- Filter Actions -->
         <div class="flex flex-wrap gap-4 justify-center">
-          <%= form.submit "Apply Filters", class: "btn btn-primary" %>
+          <%= form.button "Apply Filters", class: "btn btn-primary", type: "submit", name: nil %>
           <%= link_to "Clear Filters", interests_path, class: "btn btn-outline" %>
         </div>
       <% end %>
@@ -98,10 +98,10 @@
 
   <!-- Results Section -->
   <div class="space-y-6">
-    <% if @interests.any? %>
+    <% if @filter.interests.any? %>
       <!-- Interests Grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <% @interests.each do |interest| %>
+        <% @filter.interests.each do |interest| %>
           <div class="card bg-base-100 shadow-xl border border-base-300 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
             <div class="card-body">
               <!-- Interest Header -->
@@ -163,7 +163,12 @@
         <% end %>
       </div>
 
-      <!-- Pagination or Load More could go here if needed -->
+      <!-- Pagination -->
+      <%= render 'shared/pagination',
+          pagination: @filter.pagination,
+          previous_page_url: @filter.previous_page_url,
+          next_page_url: @filter.next_page_url %>
+
     <% else %>
       <!-- No Results -->
       <div class="card bg-base-100 shadow-xl border border-base-300">
