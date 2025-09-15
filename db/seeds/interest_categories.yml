@@ -6,6 +6,8 @@
   label: Employment
 - key: trusts
   label: Beneficial interests in, and trusteeships of, trusts
+- key: beneficial_interests_in_and_trusteeships_of_trusts
+  label: Beneficial interests in, and trusteeships of, trusts
 - key: organisations_seeking_government_funding
   label: Organisations and trusts seeking Government funding
 - key: real_property
