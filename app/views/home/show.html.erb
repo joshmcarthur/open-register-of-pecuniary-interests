@@ -1,59 +1,90 @@
-<div class="container py-4">
-  <div class="hero-section mw-lg-75 text-center mx-auto my-4">
-    <hgroup class="mb-4">
-      <h1 class="mb-1">Open Register of Penuciary Interests</h1>
-      <p>A simple way to see what companies, properties and investments your elected officials have declared</p>
-    </hgroup>
+<div class="container py-28 mx-auto">
+  <!-- Hero Section -->
+  <div class="hero min-h-96 bg-base-200 rounded-lg">
+    <div class="hero-content text-center">
+      <div class="max-w-lg">
+        <h1 class="text-5xl font-bold">Open Register of Penuciary Interests</h1>
+        <p class="py-6">A simple way to see what companies, properties and investments your elected officials have declared</p>
 
-
-    <%= form_with url: search_path, method: :get, html: { role: "search" } do |f| %>
-      <%= f.search_field :query, placeholder: "Search by MP name, electorate, company, or interest type..." %>
-      <%= f.submit "Search" %>
-    <% end %>
-
-
+        <%= form_with url: search_path, method: :get, html: { role: "search", class: "join w-full" } do |f| %>
+          <%= f.search_field :query,
+              placeholder: "Search by MP name, electorate, company, or interest type...",
+              class: "input input-bordered join-item flex-1" %>
+          <%= f.submit "Search", class: "btn btn-primary join-item" %>
+        <% end %>
+      </div>
+    </div>
   </div>
 
-  <section class="orpi-background-amber-50 p-1 rounded">
-      <small class="px-lg-4"><strong class="fw-medium">About this data:</strong> Information extracted from official PDF registers using AI (Gemini LLM). Data includes confidence scores and links to original sources.</small>
-  </section>
-
-  <div class="quick-access grid">
-      <article>
-          <header class="orpi-background-slate">Browse Parliament</header>
-          <p>Current MPs and their declared interests</p>
-      </article>
-      <article>
-          <header class="orpi-background-slate">Search by Interest</header>
-          <p>Find who has stakes in specific companies</p>
-      </article>
-      <article>
-          <header class="orpi-background-slate">Compare Parties</header>
-          <p>Aggregate analysis across political parties</p>
-      </article>
-       <article style="opacity: 0.5;">
-          <header class="orpi-background-slate">Browse Councils</header>
-          <p>Local government representatives</p>
-          <strong>Coming soon!</strong>
-      </article>
+  <!-- Warning Section -->
+  <div class="alert alert-warning my-16">
+    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+    </svg>
+    <span><strong>About this data:</strong> Information extracted from official PDF registers using AI (Gemini LLM). Data includes confidence scores and links to original sources.</span>
   </div>
 
-  <div class="grid">
-      <article class="text-center">
-          <h3 >120</h3>
-          <footer class="text-center orpi-background-slate-50">Current MPs</footer>
-      </article>
-      <article class="text-center">
-          <h3 >1,847</h3>
-          <footer class="text-center orpi-background-slate-50">Council Members</footer>
-      </article>
-      <article class="text-center">
-          <h3 >3,241</h3>
-          <footer class="text-center orpi-background-slate-50">Declared Interests</footer>
-      </article>
-      <article class="text-center">
-          <h3 >2024</h3>
-          <footer class="text-center orpi-background-slate-50">Latest Data</footer>
-      </article>
+  <!-- CTA Cards Section -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 my-8">
+    <div class="card bg-base-100 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title">Browse Parliament</h2>
+        <p>Current MPs and their declared interests</p>
+        <div class="card-actions justify-end">
+          <button class="btn btn-primary">Browse</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card bg-base-100 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title">Search by Interest</h2>
+        <p>Find who has stakes in specific companies</p>
+        <div class="card-actions justify-end">
+          <button class="btn btn-primary">Search</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card bg-base-100 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title">Compare Parties</h2>
+        <p>Aggregate analysis across political parties</p>
+        <div class="card-actions justify-end">
+          <button class="btn btn-primary">Compare</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card bg-base-100 shadow-xl opacity-50">
+      <div class="card-body">
+        <h2 class="card-title">Browse Councils</h2>
+        <p>Local government representatives</p>
+        <div class="badge badge-secondary">Coming soon!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Section -->
+  <div class="stats shadow w-full my-8">
+    <div class="stat">
+      <div class="stat-title">Current MPs</div>
+      <div class="stat-value text-primary">120</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-title">Council Members</div>
+      <div class="stat-value text-secondary">1,847</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-title">Declared Interests</div>
+      <div class="stat-value text-accent">3,241</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-title">Latest Data</div>
+      <div class="stat-value">2024</div>
+    </div>
   </div>
 </div>
