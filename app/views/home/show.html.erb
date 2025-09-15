@@ -47,13 +47,13 @@
       <div class="card-body">
         <div class="flex items-center gap-3 mb-3">
           <div class="p-3 rounded-full bg-secondary/10">
-            <%= render 'shared/icons/search', class: 'h-6 w-6 text-secondary' %>
+            <%= render 'shared/icons/dollar', class: 'h-6 w-6 text-secondary' %>
           </div>
-          <h2 class="card-title text-lg">Search by Interest</h2>
+          <h2 class="card-title text-lg">Explore Interests</h2>
         </div>
         <p class="text-base-content/70">Find who has stakes in specific companies</p>
         <div class="card-actions justify-end mt-4">
-          <a href="<%= interests_path %>" class="btn btn-secondary btn-sm">Search</a>
+          <a href="<%= interests_path %>" class="btn btn-secondary btn-sm">Explore</a>
         </div>
       </div>
     </div>
@@ -100,11 +100,11 @@
 
     <div class="stat opacity-50">
       <div class="stat-figure text-secondary">
-        <%= render 'shared/icons/building', class: 'inline-block w-8 h-8 stroke-current' %>
+        <%= render 'shared/icons/dollar', class: 'inline-block w-8 h-8 stroke-current' %>
       </div>
-      <div class="stat-title">Council Members</div>
-      <div class="stat-value text-secondary">Coming soon</div>
-      <div class="stat-desc">Local government representatives</div>
+      <div class="stat-title">Total Interests</div>
+      <div class="stat-value text-secondary"><%= HomepageStats.instance.declared_interests_count %></div>
+      <div class="stat-desc">Interests found</div>
     </div>
 
     <div class="stat">
