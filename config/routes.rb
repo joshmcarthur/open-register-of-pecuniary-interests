@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   resource :search, only: [ :show ]
+  resources :interests, only: [ :index ]
   resources :political_entities, only: [ :show, :index ], path: "political-entities" do
     get :export, on: :member
   end
