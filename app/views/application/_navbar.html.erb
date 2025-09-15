@@ -1,3 +1,19 @@
 <div class="navbar bg-base-100 shadow-sm">
-  <a class="btn btn-ghost text-xl" href="<%= root_path %>">Open Register of Penuciary Interests</a>
+  <div class="navbar-start">
+    <a class="btn btn-ghost text-xl" href="<%= root_path %>">Open Register of Penuciary Interests</a>
+  </div>
+  <div class="navbar-end">
+    <div class="dropdown dropdown-end">
+      <div tabindex="0" role="button" class="btn btn-ghost">
+        Browse
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-4 h-4 stroke-current">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg>
+      </div>
+      <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow-lg bg-base-100 rounded-box w-52 border border-base-300">
+        <li><%= link_to "Political Entities", political_entities_path %></li>
+        <li><%= link_to "Search", search_path %></li>
+      </ul>
+    </div>
+  </div>
 </div>
