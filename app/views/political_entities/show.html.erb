@@ -8,26 +8,53 @@
       <div class="hero-content w-full flex flex-col justify-between h-full">
         <!-- Entity Info -->
         <div class="flex flex-col lg:flex-row items-center justify-between gap-8 w-full flex-1">
-          <div class="flex-1 text-center lg:text-left">
-            <h1 class="text-5xl font-bold mb-4 text-base-content"><%= @political_entity.name %></h1>
-            <% if @political_entity.description.present? %>
-              <p class="text-xl text-base-content/80 mb-6 leading-relaxed"><%= @political_entity.description %></p>
-            <% end %>
+          <div class="flex-1 text-center lg:text-left flex-row flex">
+            <!-- Profile Image and Name -->
+            <div class="flex flex-col lg:flex-row items-center lg:items-start gap-6">
+              <% if @political_entity.profile_image.attached? %>
+                <div class="avatar">
+                  <div class="w-32 h-32 rounded-2xl shadow-lg">
+                    <%= image_tag @political_entity.profile_image,
+                        alt: @political_entity.name,
+                        class: "rounded-2xl object-cover" %>
+                  </div>
+                </div>
+              <% else %>
+                <div class="avatar placeholder">
+                  <div class="bg-neutral text-neutral-content rounded-2xl w-32 h-32 shadow-lg">
+                    <span class="text-4xl font-bold">
+                      <%= @political_entity.name.first.upcase %>
+                    </span>
+                  </div>
+                </div>
+              <% end %>
+              <div class="text-center lg:text-left">
+                <hgroup>
+                  <h1 class="text-5xl font-bold mb-4 text-base-content"><%= @political_entity.name %></h1>
+                  <div class="flex flex-wrap gap-1 mt-2">
+                    <!-- Jurisdictions -->
+                    <% @political_entity.jurisdictions.each do |jurisdiction| %>
+                      <% pej = @political_entity.political_entity_jurisdictions.find_by(jurisdiction: jurisdiction) %>
+                      <div class="badge badge-primary badge-xl">
+                        <%= jurisdiction.name %>
+                        <% if pej&.role.present? %>
+                          <span class="ml-1 text-xs opacity-75">(<%= pej.role %>)</span>
+                        <% end %>
+                      </div>
+                    <% end %>
 
-            <!-- Jurisdictions -->
-            <% if @political_entity.jurisdictions.any? %>
-              <div class="flex flex-wrap justify-center lg:justify-start gap-3 mb-6">
-                <% @political_entity.jurisdictions.each do |jurisdiction| %>
-                  <% pej = @political_entity.political_entity_jurisdictions.find_by(jurisdiction: jurisdiction) %>
-                  <div class="badge badge-primary badge-lg">
-                    <%= jurisdiction.name %>
-                    <% if pej&.role.present? %>
-                      <span class="ml-1 text-xs opacity-75">(<%= pej.role %>)</span>
+                    <!-- Party Affiliations -->
+                    <% parties = @political_entity.political_entity_jurisdictions.where.not(affiliation: [nil, ""]).distinct.pluck(:affiliation) %>
+                    <% parties.each do |party| %>
+                      <div class="badge badge-secondary badge-xl"><%= party %></div>
                     <% end %>
                   </div>
+                </hgroup>
+                <% if @political_entity.description.present? %>
+                  <p class="text-xl text-base-content/80 mb-6 leading-relaxed"><%= @political_entity.description %></p>
                 <% end %>
               </div>
-            <% end %>
+            </div>
           </div>
 
           <!-- Interest Count Summary -->
@@ -245,6 +272,101 @@
         </div>
       </div>
     <% end %>
+  </div>
+
+  <!-- Data Sources Section -->
+  <div class="mt-12">
+    <div class="card bg-base-100 shadow-xl border border-base-300">
+      <div class="card-body">
+        <h2 class="card-title text-2xl mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-6 h-6 stroke-current">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          </svg>
+          Data Sources & Attribution
+        </h2>
+
+        <div class="space-y-4">
+          <!-- Profile Image Attribution -->
+          <% if @political_entity.profile_image.attached? %>
+            <div class="flex flex-col sm:flex-row sm:items-center gap-2 p-4 bg-base-200 rounded-lg">
+              <div class="flex items-center gap-3">
+                <div class="avatar">
+                  <div class="w-12 h-12 rounded-lg">
+                    <%= image_tag @political_entity.profile_image,
+                        alt: @political_entity.name,
+                        class: "rounded-lg object-cover" %>
+                  </div>
+                </div>
+                <div>
+                  <div class="font-semibold">Profile Image</div>
+                  <div class="text-sm text-base-content/70">
+                    Source: Wikimedia Commons
+                  </div>
+                </div>
+              </div>
+              <div class="flex flex-wrap gap-2 sm:ml-auto">
+                <% if @political_entity.profile_image.metadata[:wikipedia_page_url]  %>
+                  <%= link_to @political_entity.profile_image.metadata[:wikipedia_page_url],
+                      target: "_blank",
+                      class: "btn btn-sm btn-outline btn-primary" do %>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-4 h-4 stroke-current">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                    </svg>
+                    Wikipedia Page
+                  <% end %>
+                <% end %>
+                <% if @political_entity.profile_image.metadata[:wikimedia_url] %>
+                  <%= link_to @political_entity.profile_image.metadata[:wikimedia_url],
+                      target: "_blank",
+                      class: "btn btn-sm btn-outline btn-secondary" do %>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-4 h-4 stroke-current">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    Original Image
+                  <% end %>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+
+          <!-- Interest Data Sources -->
+          <% if @political_entity.interests.any? %>
+            <div class="p-4 bg-base-200 rounded-lg">
+              <div class="font-semibold mb-2">Interest Declarations</div>
+              <div class="text-sm text-base-content/70 mb-3">
+                The following sources were used to compile interest declaration data:
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <% @political_entity.interests.joins(:source).distinct.pluck('sources.name', 'sources.year').each do |source_name, year| %>
+                  <div class="badge badge-primary badge-sm">
+                    <%= source_name %>
+                    <% if year.present? %>
+                      (<%= year %>)
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+
+          <!-- General Attribution -->
+          <div class="p-4 bg-base-200 rounded-lg">
+            <div class="font-semibold mb-2">About This Data</div>
+            <div class="text-sm text-base-content/70 space-y-2">
+              <p>
+                Profile images are sourced from Wikimedia Commons and are used under their respective
+                <a href="https://commons.wikimedia.org/wiki/Commons:Licensing" target="_blank" class="link link-hover">licensing terms</a>.
+                All images are freely licensed for use.
+              </p>
+              <p>
+                Interest declaration data is compiled from official government sources and public records.
+                For the most current and complete information, please refer to the original sources.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Export Actions -->
