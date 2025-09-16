@@ -26,7 +26,12 @@ class PoliticalEntitiesController < ApplicationController
 
   def export
     @political_entity = PoliticalEntity.find(params[:id])
-    render csv: @political_entity.interests.to_csv
+    export = PoliticalEntityInterestsExport.new(@political_entity)
+
+    send_data export.to_csv,
+              filename: export.filename,
+              type: "text/csv",
+              disposition: "attachment"
   end
 
   private

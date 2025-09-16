@@ -370,12 +370,10 @@
   </div>
 
   <!-- Export Actions -->
-  <div class="flex justify-center mt-12">
+  <div class="flex justify-end mt-12">
     <div class="btn-group">
-      <%= link_to "Export CSV", export_political_entity_path(@political_entity),
-          class: "btn btn-outline btn-primary" %>
-      <%= link_to "Back to Search", root_path,
-          class: "btn btn-outline" %>
+      <%= link_to "Export this data as CSV", export_political_entity_path(@political_entity),
+          class: "btn btn-primary" %>
     </div>
   </div>
 </div>
