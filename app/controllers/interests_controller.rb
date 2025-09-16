@@ -1,5 +1,14 @@
 class InterestsController < ApplicationController
   def index
+    # Set cache headers based on whether this is a search or browse
+    if params[:q].present?
+      # Search results can be cached for shorter periods
+      set_short_cache_headers(15.minutes)
+    else
+      # Browse/filter results can be cached longer since data is read-only
+      set_long_cache_headers
+    end
+
     @filter = InterestsFilter.new(filter_params)
 
     if @filter.query.present?
@@ -26,5 +35,11 @@ class InterestsController < ApplicationController
 
   def filter_params
     params.permit(:jurisdiction, :party, :interest_category, :source, :page, :q)
+  end
+
+  def cache_key_for_current_data
+    # Include filter parameters in cache key for proper cache invalidation
+    filter_key = filter_params.to_h.sort.to_h.to_s
+    "interests-#{action_name}-#{Digest::MD5.hexdigest(filter_key)}"
   end
 end
