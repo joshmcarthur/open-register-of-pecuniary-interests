@@ -3,6 +3,7 @@
 // ./bin/rails generate stimulus controllerName
 
 import { application } from "./application"
+import Chartjs from "@stimulus-components/chartjs"
 
-import HelloController from "./hello_controller"
-application.register("hello", HelloController)
+
+application.register("chartjs", Chartjs)
