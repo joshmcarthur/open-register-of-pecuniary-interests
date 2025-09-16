@@ -1,6 +1,6 @@
 namespace :import do
   desc "Import political entities and interests from JSONL file"
-  task :json, [:file] => :environment do |t, args|
+  task :json, [ :file ] => :environment do |t, args|
     file_path = Rails.root.join(args[:file] || ENV["JSONL_FILE"])
 
     unless File.exist?(file_path)
@@ -99,6 +99,7 @@ namespace :import do
               description: item_description,
               political_entity_jurisdiction: political_entity_jurisdiction,
               interest_category: interest_category,
+              source_page_numbers: data["source_page_numbers"],
               source: source
             )
 

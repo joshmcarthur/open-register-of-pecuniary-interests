@@ -1,0 +1,73 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 4,
+      "fingerprint": "29636f123f068b4d96a29a478a23c8761a1421e38d6d43ccf4d0f1bd55066df9",
+      "check_name": "LinkToHref",
+      "message": "Potentially unsafe model attribute in `link_to` href",
+      "file": "app/views/interests/index.html.erb",
+      "line": 43,
+      "link": "https://brakemanscanner.org/docs/warning_types/link_to_href",
+      "code": "link_to(\"\\u00D7\", InterestsFilter.new(filter_params).clear_filter_url(filter[:type]), :class => \"ml-2 hover:text-error\")",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "InterestsController",
+          "method": "index",
+          "line": 22,
+          "file": "app/controllers/interests_controller.rb",
+          "rendered": {
+            "name": "interests/index",
+            "file": "app/views/interests/index.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "interests/index"
+      },
+      "user_input": "InterestsFilter.new(filter_params).clear_filter_url(filter[:type])",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 4,
+      "fingerprint": "469e7ef12926ecd5cf04b1d2ed22ef81e2312cf707d4909957f6b7264e52c278",
+      "check_name": "LinkToHref",
+      "message": "Potentially unsafe model attribute in `link_to` href",
+      "file": "app/views/political_entities/index.html.erb",
+      "line": 22,
+      "link": "https://brakemanscanner.org/docs/warning_types/link_to_href",
+      "code": "link_to(\"\\u00D7\", PoliticalEntitiesFilter.new(filter_params).clear_filter_url(filter[:type]), :class => \"ml-2 hover:text-error\")",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "PoliticalEntitiesController",
+          "method": "index",
+          "line": 5,
+          "file": "app/controllers/political_entities_controller.rb",
+          "rendered": {
+            "name": "political_entities/index",
+            "file": "app/views/political_entities/index.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "political_entities/index"
+      },
+      "user_input": "PoliticalEntitiesFilter.new(filter_params).clear_filter_url(filter[:type])",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
+      "note": ""
+    }
+  ],
+  "brakeman_version": "7.1.0"
+}
