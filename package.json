@@ -6,7 +6,8 @@
   },
   "scripts": {
     "build": "esbuild app/javascript/*.* --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets",
-    "build:css": "bin/rails tailwindcss:watch"
+    "watch:css": "bin/rails tailwindcss:watch",
+    "build:css": "bin/rails tailwindcss:build"
   },
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
