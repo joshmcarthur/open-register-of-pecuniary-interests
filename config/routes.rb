@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     get :export, on: :member
   end
   resources :about, only: [ :show ]
+  resources :comparison, only: [ :index ]
 
 
   # Defines the root path route ("/")

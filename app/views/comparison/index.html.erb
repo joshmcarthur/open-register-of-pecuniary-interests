@@ -1,0 +1,191 @@
+<%= render "application/navbar" %>
+
+<div class="container py-12 mx-auto px-4 sm:px-6 lg:px-8">
+  <!-- Hero Section -->
+  <div class="hero min-h-[500px] bg-gradient-to-br from-primary/10 via-base-200 to-secondary/10 rounded-2xl shadow-2xl mb-12">
+    <div class="hero-content text-center">
+      <div class="max-w-4xl">
+        <div class="mb-6">
+          <div class="badge badge-primary badge-lg mb-4">Data Analysis</div>
+          <h1 class="text-6xl font-bold text-base-content leading-tight">
+            Political Interest <span class="text-primary">Comparison</span>
+          </h1>
+        </div>
+        <p class="text-xl text-base-content/80 mb-8 leading-relaxed">
+          Comprehensive analysis of declared financial interests across political parties and categories
+        </p>
+
+        <!-- Quick Stats in Hero -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 max-w-6xl mx-auto">
+          <div class="stat bg-base-100/80 backdrop-blur-sm shadow-lg rounded-xl border border-base-300 p-4">
+            <div class="stat-figure text-primary">
+              <%= render 'shared/icons/users', class: 'inline-block w-5 h-5 stroke-current' %>
+            </div>
+            <div class="stat-title text-xs">Total Entities</div>
+            <div class="stat-value text-base text-primary"><%= @stats[:total_entities] %></div>
+          </div>
+
+          <div class="stat bg-base-100/80 backdrop-blur-sm shadow-lg rounded-xl border border-base-300 p-4">
+            <div class="stat-figure text-secondary">
+              <%= render 'shared/icons/dollar', class: 'inline-block w-5 h-5 stroke-current' %>
+            </div>
+            <div class="stat-title text-xs">Total Interests</div>
+            <div class="stat-value text-base text-secondary"><%= @stats[:total_interests] %></div>
+          </div>
+
+          <div class="stat bg-base-100/80 backdrop-blur-sm shadow-lg rounded-xl border border-base-300 p-4">
+            <div class="stat-figure text-accent">
+              <%= render 'shared/icons/chart', class: 'inline-block w-5 h-5 stroke-current' %>
+            </div>
+            <div class="stat-title text-xs">Average per Entity</div>
+            <div class="stat-value text-base text-accent"><%= @stats[:average_interests_per_entity] %></div>
+          </div>
+
+          <div class="stat bg-base-100/80 backdrop-blur-sm shadow-lg rounded-xl border border-base-300 p-4">
+            <div class="stat-figure text-success">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              </svg>
+            </div>
+            <div class="stat-title text-xs">Maximum</div>
+            <div class="stat-value text-base text-success"><%= @stats[:max_interests] %></div>
+          </div>
+
+          <div class="stat bg-base-100/80 backdrop-blur-sm shadow-lg rounded-xl border border-base-300 p-4">
+            <div class="stat-figure text-warning">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" />
+              </svg>
+            </div>
+            <div class="stat-title text-xs">Minimum</div>
+            <div class="stat-value text-base text-warning"><%= @stats[:min_interests] %></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Charts Section -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+    <!-- Party Comparison Chart -->
+    <div class="card bg-base-100 shadow-xl border border-base-300">
+      <div class="card-body">
+        <h2 class="card-title text-2xl mb-4">
+          <%= render 'shared/icons/building', class: 'h-6 w-6 text-primary' %>
+          Interests by Party
+        </h2>
+        <div class="h-80">
+          <canvas
+            data-controller="chartjs"
+            data-chartjs-data-value="<%= @comparison_stats.party_chart_data.to_json %>"
+            data-chartjs-type-value="bar"
+            data-chartjs-options-value="<%= @comparison_stats.party_chart_options.to_json %>"
+          ></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Distribution Chart -->
+    <div class="card bg-base-100 shadow-xl border border-base-300">
+      <div class="card-body">
+        <h2 class="card-title text-2xl mb-4">
+          <%= render 'shared/icons/chart', class: 'h-6 w-6 text-secondary' %>
+          Interest Categories
+        </h2>
+        <div class="h-80">
+          <canvas
+            data-controller="chartjs"
+            data-chartjs-data-value="<%= @comparison_stats.category_chart_data.to_json %>"
+            data-chartjs-type-value="doughnut"
+            data-chartjs-options-value="<%= @comparison_stats.category_chart_options.to_json %>"
+          ></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top Individuals Table -->
+  <div class="card bg-base-100 shadow-xl border border-base-300 mb-12">
+    <div class="card-body">
+      <h2 class="card-title text-2xl mb-6">
+        <%= render 'shared/icons/users', class: 'h-6 w-6 text-accent' %>
+        Top 10 by Interest Count
+      </h2>
+      <div class="overflow-x-auto">
+        <table class="table table-zebra w-full">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Name</th>
+              <th>Interest Count</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @individual_stats.each_with_index do |entity, index| %>
+              <tr>
+                <td>
+                  <div class="badge badge-primary badge-lg"><%= index + 1 %></div>
+                </td>
+                <td>
+                  <div class="font-medium"><%= entity[:name] %></div>
+                </td>
+                <td>
+                  <div class="badge badge-secondary badge-lg"><%= entity[:interest_count] %></div>
+                </td>
+                <td>
+                  <%= link_to "View Details",
+                      political_entity_path(entity[:id]),
+                      class: "btn btn-sm btn-outline btn-primary" %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Party Statistics Table -->
+  <div class="card bg-base-100 shadow-xl border border-base-300">
+    <div class="card-body">
+      <h2 class="card-title text-2xl mb-6">
+        <%= render 'shared/icons/building', class: 'h-6 w-6 text-info' %>
+        Party Statistics
+      </h2>
+      <div class="overflow-x-auto">
+        <table class="table table-zebra w-full">
+          <thead>
+            <tr>
+              <th>Party</th>
+              <th>Members</th>
+              <th>Total Interests</th>
+              <th>Average per Member</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @party_stats.each do |party| %>
+              <tr>
+                <td>
+                  <div class="font-medium"><%= party[:name] %></div>
+                </td>
+                <td>
+                  <div class="badge badge-primary"><%= party[:entity_count] %></div>
+                </td>
+                <td>
+                  <div class="badge badge-secondary"><%= party[:interest_count] %></div>
+                </td>
+                <td>
+                  <div class="badge badge-accent"><%= party[:average_interests] %></div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
