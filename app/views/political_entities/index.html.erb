@@ -35,7 +35,7 @@
               <%= render 'shared/icons/building', class: 'inline-block w-8 h-8 stroke-current' %>
             </div>
             <div class="stat-title">Total Entities</div>
-            <div class="stat-value text-primary"><%= @political_entities.count %></div>
+            <div class="stat-value text-primary"><%= @filter.political_entities.count %></div>
             <div class="stat-desc">Political entities found</div>
           </div>
         </div>
@@ -59,7 +59,7 @@
               <span class="label-text font-semibold">Jurisdiction</span>
             </label>
             <%= form.select :jurisdiction,
-                options_from_collection_for_select(@jurisdictions, :id, :name, @jurisdiction_filter),
+                options_from_collection_for_select(@filter.jurisdictions, :id, :name, @filter.jurisdiction_filter),
                 { prompt: "All Jurisdictions" },
                 { class: "select select-bordered w-full" } %>
           </div>
@@ -70,7 +70,7 @@
               <span class="label-text font-semibold">Party</span>
             </label>
             <%= form.select :party,
-                options_for_select([["All Parties", ""]] + @parties.map { |party| [party, party] }, @party_filter),
+                options_for_select([["All Parties", ""]] + @filter.parties.map { |party| [party, party] }, @filter.party_filter),
                 {},
                 { class: "select select-bordered w-full" } %>
           </div>
@@ -81,7 +81,7 @@
               <span class="label-text font-semibold">Interest Category</span>
             </label>
             <%= form.select :interest_category,
-                options_from_collection_for_select(@interest_categories, :key, :label, @interest_category_filter),
+                options_from_collection_for_select(@filter.interest_categories, :key, :label, @filter.interest_category_filter),
                 { prompt: "All Categories" },
                 { class: "select select-bordered w-full" } %>
           </div>
@@ -98,10 +98,10 @@
 
   <!-- Results Section -->
   <div class="space-y-6">
-    <% if @political_entities.any? %>
+    <% if @filter.political_entities.any? %>
       <!-- Political Entities Grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <% @political_entities.each do |entity| %>
+        <% @filter.political_entities.each do |entity| %>
           <div class="card bg-base-100 shadow-xl border border-base-300 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
             <div class="card-body">
               <!-- Entity Header with Profile Image -->
