@@ -4,39 +4,65 @@
 
 <div class="container py-12 mx-auto px-4 sm:px-6 lg:px-8">
   <!-- Header Section -->
-  <div class="hero min-h-[300px] bg-gradient-to-br from-secondary/10 via-base-200 to-secondary/10 rounded-2xl shadow-2xl mb-12">
-    <div class="hero-content w-full flex flex-row justify-between h-full">
-      <!-- Title Section -->
-      <div class="text-left">
-        <h1 class="text-5xl font-bold mb-4 text-base-content">Interests</h1>
-        <p class="text-xl text-base-content/80 mb-6 leading-relaxed">
-          Browse and filter interests by jurisdiction, party affiliation, and interest categories.
+  <div class="hero min-h-[200px] bg-gradient-to-br from-secondary/10 via-base-200 to-secondary/10 rounded-2xl shadow-2xl mb-8">
+    <div class="hero-content w-full">
+      <div class="text-center w-full">
+        <h1 class="text-4xl font-bold mb-4 text-base-content">Interests</h1>
+        <p class="text-lg text-base-content/80 mb-6">
+          <% if @is_search_mode %>
+            Search results for "<%= @filter.query %>"
+          <% else %>
+            Browse and filter interests by jurisdiction, party affiliation, and interest categories.
+          <% end %>
         </p>
 
-      <!-- Active Filters Row -->
-      <% if @filter.has_active_filters? %>
-        <div class="flex flex-wrap gap-2 justify-start">
-          <% @filter.active_filters.each do |filter| %>
-            <div class="badge <%= filter_badge_class(filter[:type]) %> badge-xl">
-              <%= filter[:type].to_s.humanize %>: <%= filter[:label] %>
-              <%= link_to "×", @filter.clear_filter_url(filter[:type]),
-                  class: "ml-2 hover:text-error" %>
-            </div>
+        <!-- Search Form -->
+        <div class="w-full max-w-2xl mx-auto mb-4">
+          <%= form_with url: interests_path, method: :get, html: { role: "search", class: "join w-full shadow-lg" } do |f| %>
+            <%= f.search_field :q,
+                value: @filter.query,
+                placeholder: "Search by MP name, electorate, company, or interest type...",
+                class: "input input-bordered join-item flex-1 text-lg h-12" %>
+            <%= f.button "Search", class: "btn btn-primary join-item h-12 px-8 text-lg", type: "submit", name: nil %>
+            <!-- Preserve current filters -->
+            <%= f.hidden_field :jurisdiction, value: @filter.jurisdiction_filter if @filter.jurisdiction_filter.present? %>
+            <%= f.hidden_field :party, value: @filter.party_filter if @filter.party_filter.present? %>
+            <%= f.hidden_field :interest_category, value: @filter.interest_category_filter if @filter.interest_category_filter.present? %>
+            <%= f.hidden_field :source, value: @filter.source_filter if @filter.source_filter.present? %>
           <% end %>
         </div>
-      <% end %>
-      </div>
 
-      <!-- Results Summary -->
-      <div class="flex justify-center">
-        <div class="stats stats-horizontal shadow-lg bg-base-100 border border-base-300 rounded-2xl">
-          <div class="stat">
-            <div class="stat-figure text-secondary">
-              <%= render 'shared/icons/dollar', class: 'inline-block w-8 h-8 stroke-current' %>
+        <!-- Active Filters and Results Count -->
+        <div class="flex flex-col items-center gap-3">
+          <!-- Active Filters -->
+          <% if @filter.has_active_filters? %>
+            <div class="flex flex-wrap gap-2 justify-center">
+              <% @filter.active_filters.each do |filter| %>
+                <div class="badge <%= filter_badge_class(filter[:type]) %> badge-lg">
+                  <%= filter[:type].to_s.humanize %>: <%= filter[:label] %>
+                  <%= link_to "×", @filter.clear_filter_url(filter[:type]),
+                      class: "ml-2 hover:text-error" %>
+                </div>
+              <% end %>
             </div>
-            <div class="stat-title">Total Interests</div>
-            <div class="stat-value text-secondary"><%= @filter.pagination.total_count %></div>
-            <div class="stat-desc">Interests found</div>
+          <% end %>
+
+          <!-- Results Count (subtle) -->
+          <div class="text-sm text-base-content/60">
+            <% if @is_search_mode %>
+              <%= pluralize(@total_count, 'result') %> found
+              <% if @search_breakdown.present? %>
+                <% breakdown_parts = [] %>
+                <% breakdown_parts << "#{@search_breakdown[:like_count]} exact" if @search_breakdown[:like_count] > 0 %>
+                <% breakdown_parts << "#{@search_breakdown[:fts5_count]} similar" if @search_breakdown[:fts5_count] > 0 %>
+                <% breakdown_parts << "#{@search_breakdown[:vector_count]} approximate" if @search_breakdown[:vector_count] > 0 %>
+                <% if breakdown_parts.any? %>
+                  (<%= breakdown_parts.join(', ') %>)
+                <% end %>
+              <% end %>
+            <% else %>
+              <%= pluralize(@total_count, 'interest') %> total
+            <% end %>
           </div>
         </div>
       </div>
@@ -52,6 +78,9 @@
       </h2>
 
       <%= form_with url: interests_path, method: :get, local: true, class: "space-y-6" do |form| %>
+        <!-- Preserve search query -->
+        <%= form.hidden_field :q, value: @filter.query if @filter.query.present? %>
+
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <!-- Jurisdiction Filter -->
           <div class="form-control">
@@ -59,7 +88,7 @@
               <span class="label-text font-semibold">Jurisdiction</span>
             </label>
             <%= form.select :jurisdiction,
-                options_from_collection_for_select(@filter.jurisdictions, :id, :name, @filter.jurisdiction_filter),
+                options_from_collection_for_select(@filter.jurisdictions, :slug, :name, @filter.jurisdiction_filter),
                 { prompt: "All Jurisdictions" },
                 { class: "select select-bordered w-full" } %>
           </div>
@@ -90,7 +119,7 @@
         <!-- Filter Actions -->
         <div class="flex flex-wrap gap-4 justify-center">
           <%= form.button "Apply Filters", class: "btn btn-primary", type: "submit", name: nil %>
-          <%= link_to "Clear Filters", interests_path, class: "btn btn-outline" %>
+          <%= link_to "Clear Filters", interests_path(q: @filter.query), class: "btn btn-outline" %>
         </div>
       <% end %>
     </div>
@@ -98,10 +127,10 @@
 
   <!-- Results Section -->
   <div class="space-y-6">
-    <% if @filter.interests.any? %>
+    <% if @interests.any? %>
       <!-- Interests Grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <% @filter.interests.each do |interest| %>
+        <% @interests.each do |interest| %>
           <div class="card bg-base-100 shadow-xl border border-base-300 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
             <div class="card-body">
               <!-- Interest Header -->
@@ -133,20 +162,22 @@
               <!-- Political Entity Info -->
               <div class="card-actions justify-between items-center mt-auto">
                 <div class="flex items-center gap-2">
-                  <div class="avatar avatar-sm">
-                    <% if interest.political_entity.profile_image.attached? %>
+                  <% if interest.political_entity.profile_image.attached? %>
+                    <div class="avatar avatar-sm">
                       <div class="w-8 rounded">
                         <%= image_tag interest.political_entity.profile_image,
                             alt: interest.political_entity.name %>
                       </div>
-                    <% else %>
+                    </div>
+                  <% else %>
+                    <div class="avatar avatar-placeholder avatar-sm">
                       <div class="bg-neutral text-neutral-content rounded w-8">
                         <span class="text-xs">
                           <%= interest.political_entity.name.first.upcase %>
                         </span>
                       </div>
-                    <% end %>
-                  </div>
+                    </div>
+                  <% end %>
                   <div>
                     <div class="text-sm font-medium">
                       <%= link_to interest.political_entity.name, political_entity_path(interest.political_entity),
@@ -163,11 +194,13 @@
         <% end %>
       </div>
 
-      <!-- Pagination -->
-      <%= render 'shared/pagination',
-          pagination: @filter.pagination,
-          previous_page_url: @filter.previous_page_url,
-          next_page_url: @filter.next_page_url %>
+      <!-- Pagination (only in browse mode) -->
+      <% unless @is_search_mode %>
+        <%= render 'shared/pagination',
+            pagination: @filter.pagination,
+            previous_page_url: @filter.previous_page_url,
+            next_page_url: @filter.next_page_url %>
+      <% end %>
 
     <% else %>
       <!-- No Results -->

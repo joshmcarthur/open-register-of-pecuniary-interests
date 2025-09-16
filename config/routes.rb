@@ -9,13 +9,10 @@ Rails.application.routes.draw do
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
-  resource :search, only: [ :show ]
   resources :interests, only: [ :index ]
   resources :political_entities, only: [ :show, :index ], path: "political-entities" do
     get :export, on: :member
   end
-
-  resources :interests, only: [ :index ]
   resources :about, only: [ :show ]
 
 

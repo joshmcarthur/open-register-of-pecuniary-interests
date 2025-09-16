@@ -1,29 +1,47 @@
 class InterestsFilter
   PER_PAGE = 12 # Number of interests per page
+  DEFAULT_ORDER = "interest_categories.label, interests.description"
 
-  attr_reader :jurisdiction_filter, :party_filter, :interest_category_filter, :interests, :jurisdictions, :parties, :interest_categories, :pagination
+  attr_reader :jurisdiction_filter,
+              :party_filter,
+              :interest_category_filter,
+              :results,
+              :relation,
+              :jurisdictions,
+              :parties,
+              :interest_categories,
+              :pagination,
+              :query,
+              :source_filter,
+              :total_count
 
   def initialize(params = {})
+    @query = params[:q]&.strip
+    @order = params[:order] || DEFAULT_ORDER
+    @paginate = params.fetch(:paginate, true)
     @jurisdiction_filter = params[:jurisdiction]
     @party_filter = params[:party]
     @interest_category_filter = params[:interest_category]
     @source_filter = params[:source]
     @current_page = [ params[:page].to_i, 1 ].max
 
-    # Calculate total count before pagination
-    @total_count = build_filtered_interests_count
+    # Calculate categorisations
+    @jurisdictions = load_jurisdictions
+    @parties = load_parties
+    @sources = load_sources
+    @interest_categories = load_interest_categories
+
+    # Calculate overall relation, then paginate and order if required
+    @relation = build_relation
+    @results = @relation
+    @total_count = @relation.distinct.count
+    @results = @results.order(@order) if @order.present?
+    @results = @results.limit(PER_PAGE).offset((@current_page - 1) * PER_PAGE) if @paginate
     @pagination = Pagination.new(
       current_page: @current_page,
       total_count: @total_count,
       per_page: PER_PAGE
     )
-
-    # Now build the paginated interests
-    @interests = build_filtered_interests
-    @jurisdictions = load_jurisdictions
-    @parties = load_parties
-    @sources = load_sources
-    @interest_categories = load_interest_categories
   end
 
   def filtered_count
@@ -31,11 +49,12 @@ class InterestsFilter
   end
 
   def has_active_filters?
-    active_filters.any?
+    active_filters.any? || @query.present?
   end
 
   def active_filters
     filters = []
+    filters << { type: :query, value: @query, label: @query } if @query.present?
     filters << { type: :jurisdiction, value: @jurisdiction_filter, label: jurisdiction_label } if @jurisdiction_filter.present?
     filters << { type: :party, value: @party_filter, label: @party_filter } if @party_filter.present?
     filters << { type: :interest_category, value: @interest_category_filter, label: interest_category_label } if @interest_category_filter.present?
@@ -45,17 +64,22 @@ class InterestsFilter
 
   def clear_filter_url(filter_type)
     case filter_type
+    when :query
+      build_url(jurisdiction: @jurisdiction_filter, party: @party_filter, interest_category: @interest_category_filter, source: @source_filter)
     when :jurisdiction
-      build_url(party: @party_filter, interest_category: @interest_category_filter)
+      build_url(q: @query, party: @party_filter, interest_category: @interest_category_filter, source: @source_filter)
     when :party
-      build_url(jurisdiction: @jurisdiction_filter, interest_category: @interest_category_filter)
+      build_url(q: @query, jurisdiction: @jurisdiction_filter, interest_category: @interest_category_filter, source: @source_filter)
     when :interest_category
-      build_url(jurisdiction: @jurisdiction_filter, party: @party_filter)
+      build_url(q: @query, jurisdiction: @jurisdiction_filter, party: @party_filter, source: @source_filter)
+    when :source
+      build_url(q: @query, jurisdiction: @jurisdiction_filter, party: @party_filter, interest_category: @interest_category_filter)
     end
   end
 
   def pagination_params
     {
+      q: @query,
       jurisdiction: @jurisdiction_filter,
       party: @party_filter,
       interest_category: @interest_category_filter,
@@ -78,36 +102,20 @@ class InterestsFilter
     build_url(pagination_params.merge(page: page_number))
   end
 
+  def build_relation
+    relation = Interest.includes(:interest_category, :source, political_entity_jurisdiction: [ :political_entity, :jurisdiction ])
+                       .joins(political_entity_jurisdiction: [ :political_entity, :jurisdiction ])
+
+    relation = apply_jurisdiction_filter(relation) if @jurisdiction_filter.present?
+    relation = apply_party_filter(relation) if @party_filter.present?
+    relation = apply_interest_category_filter(relation) if @interest_category_filter.present?
+    relation = apply_source_filter(relation) if @source_filter.present?
+
+    relation
+  end
+
+
   private
-
-  def build_filtered_interests_count
-    interests = Interest.includes(:interest_category, :source, political_entity_jurisdiction: [ :political_entity, :jurisdiction ])
-                       .joins(political_entity_jurisdiction: [ :political_entity, :jurisdiction ])
-
-    interests = apply_jurisdiction_filter(interests) if @jurisdiction_filter.present?
-    interests = apply_party_filter(interests) if @party_filter.present?
-    interests = apply_interest_category_filter(interests) if @interest_category_filter.present?
-    interests = apply_source_filter(interests) if @source_filter.present?
-
-    # Count without pagination
-    interests.distinct.count
-  end
-
-  def build_filtered_interests
-    interests = Interest.includes(:interest_category, :source, political_entity_jurisdiction: [ :political_entity, :jurisdiction ])
-                       .joins(political_entity_jurisdiction: [ :political_entity, :jurisdiction ])
-
-    interests = apply_jurisdiction_filter(interests) if @jurisdiction_filter.present?
-    interests = apply_party_filter(interests) if @party_filter.present?
-    interests = apply_interest_category_filter(interests) if @interest_category_filter.present?
-    interests = apply_source_filter(interests) if @source_filter.present?
-
-    # Apply pagination
-    offset = (@current_page - 1) * PER_PAGE
-    interests.distinct.order("interest_categories.label, interests.description")
-             .limit(PER_PAGE)
-             .offset(offset)
-  end
 
   def apply_jurisdiction_filter(interests)
     interests.where(jurisdictions: { slug: @jurisdiction_filter })
