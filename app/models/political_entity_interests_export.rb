@@ -80,3 +80,4 @@ class PoliticalEntityInterestsExport
     end
   end
 end
+
