@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_15_065104) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_16_014624) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -63,6 +63,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_15_065104) do
     t.json "metadata", default: {}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.binary "embedding"
+    t.index ["embedding"], name: "index_interests_on_embedding"
     t.index ["interest_category_id"], name: "index_interests_on_interest_category_id"
     t.index ["political_entity_jurisdiction_id"], name: "index_interests_on_political_entity_jurisdiction_id"
     t.index ["source_id"], name: "index_interests_on_source_id"
@@ -170,4 +172,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_15_065104) do
   add_foreign_key "political_entity_jurisdictions", "jurisdictions"
   add_foreign_key "political_entity_jurisdictions", "political_entities"
   add_foreign_key "tool_calls", "messages"
+
+  # Virtual tables defined in this database.
+  # Note that virtual tables may not work with other database engines. Be careful if changing database.
+  create_virtual_table "interests_search_index", "fts5", ["interest_id UNINDEXED", "description", "political_entity_name", "jurisdiction_name", "interest_category_label", "tokenize='trigram remove_diacritics 1'"]
 end
