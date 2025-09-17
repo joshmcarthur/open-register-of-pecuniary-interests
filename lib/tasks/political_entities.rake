@@ -7,18 +7,21 @@ namespace :political_entities do
     total = entities.count
     success_count = 0
     error_count = 0
+    force = ENV["FORCE"] == "true"
 
     entities.each_with_index do |entity, index|
       puts "Processing #{index + 1}/#{total}: #{entity.name}"
 
+      normalized_name = entity.name.gsub(/^Dr|Hon|Hon Dr|Rt Hon/, "").strip
+
       # Skip if already has an image
-      if entity.profile_image.attached?
+      if entity.profile_image.attached? && !force
         puts "  ✓ Already has profile image from #{entity.image_source} (fetched: #{entity.image_fetched_at})"
         next
       end
 
       begin
-        service = WikimediaImageService.new(entity.name)
+        service = WikimediaImageService.new(normalized_name)
         image_data = service.fetch_profile_image
 
         if image_data
@@ -64,7 +67,6 @@ namespace :political_entities do
     end
 
     puts "Fetching profile image for: #{entity.name}"
-
     service = WikimediaImageService.new(entity.name)
     image_data = service.fetch_profile_image
 

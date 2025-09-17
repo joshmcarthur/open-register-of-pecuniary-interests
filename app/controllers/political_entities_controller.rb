@@ -1,4 +1,5 @@
 class PoliticalEntitiesController < ApplicationController
+  before_action :set_long_cache_headers, only: [ :index, :show, :export ]
   def index
     @filter = PoliticalEntitiesFilter.new(filter_params)
 
@@ -38,5 +39,17 @@ class PoliticalEntitiesController < ApplicationController
 
   def filter_params
     params.permit(:jurisdiction, :party, :interest_category)
+  end
+
+  def cache_key_for_current_data
+    case action_name
+    when "index"
+      filter_key = filter_params.to_h.sort.to_h.to_s
+      "political-entities-index-#{Digest::MD5.hexdigest(filter_key)}"
+    when "show"
+      "political-entity-#{params[:id]}-#{params[:tab] || 'all'}"
+    else
+      super
+    end
   end
 end

@@ -102,6 +102,9 @@ GEM
     cssbundling-rails (1.4.3)
       railties (>= 6.0.0)
     csv (3.3.5)
+    cuprite (0.17)
+      capybara (~> 3.0)
+      ferrum (~> 0.17.0)
     date (3.4.1)
     debug (1.11.0)
       irb (~> 1.10)
@@ -126,6 +129,12 @@ GEM
       net-http (>= 0.5.0)
     faraday-retry (2.3.2)
       faraday (~> 2.0)
+    ferrum (0.17.1)
+      addressable (~> 2.5)
+      base64 (~> 0.2)
+      concurrent-ruby (~> 1.1)
+      webrick (~> 1.7)
+      websocket-driver (~> 0.7)
     ffi (1.17.2-arm64-darwin)
     ffi (1.17.2-x86_64-linux-gnu)
     fugit (1.11.2)
@@ -251,7 +260,6 @@ GEM
     regexp_parser (2.11.2)
     reline (0.6.2)
       io-console (~> 0.5)
-    rexml (3.4.4)
     rubocop (1.80.2)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
@@ -294,14 +302,7 @@ GEM
       faraday-retry (>= 1)
       marcel (~> 1.0)
       zeitwerk (~> 2)
-    rubyzip (3.1.0)
     securerandom (0.4.1)
-    selenium-webdriver (4.35.0)
-      base64 (~> 0.2)
-      logger (~> 1.4)
-      rexml (~> 3.2, >= 3.2.5)
-      rubyzip (>= 1.2.2, < 4.0)
-      websocket (~> 1.0)
     solid_cable (3.0.12)
       actioncable (>= 7.2)
       activejob (>= 7.2)
@@ -349,7 +350,7 @@ GEM
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
       railties (>= 6.0.0)
-    websocket (1.2.11)
+    webrick (1.9.1)
     websocket-driver (0.8.0)
       base64
       websocket-extensions (>= 0.1.0)
@@ -369,6 +370,7 @@ DEPENDENCIES
   combine_pdf
   cssbundling-rails
   csv
+  cuprite
   debug
   dotenv-rails (~> 3.1)
   image_processing (~> 1.2)
@@ -380,7 +382,6 @@ DEPENDENCIES
   rails (~> 8.0.2, >= 8.0.2.1)
   rubocop-rails-omakase
   ruby_llm (~> 1.7)
-  selenium-webdriver
   solid_cable
   solid_cache
   solid_queue
