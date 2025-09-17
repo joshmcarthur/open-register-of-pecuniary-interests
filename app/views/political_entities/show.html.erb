@@ -152,15 +152,7 @@
 
                       <!-- Source and metadata info -->
                       <div class="flex flex-wrap gap-2">
-                        <div class="badge badge-primary badge-sm">
-                          <%= interest.source.name %>
-                          <% if interest.source.year.present? && interest.source.name.exclude?(interest.source.year.to_s) %>
-                            (<%= interest.source.year %>)
-                          <% end %>
-                          <% if interest.source_page_numbers&.any? %>
-                            (page <%= interest.source_page_numbers.to_sentence %>)
-                          <% end %>
-                        </div>
+                        <%= render "interests/source", interest: interest %>
 
                         <% if interest.metadata.present? && interest.metadata.any? %>
                           <div class="badge badge-accent badge-sm">
@@ -340,16 +332,8 @@
                 The following sources were used to compile interest declaration data:
               </div>
               <div class="flex flex-wrap gap-2">
-                <% @political_entity.interests.joins(:source).distinct.pluck('sources.name', 'sources.year', 'interests.source_page_numbers').each do |source_name, year, source_page_numbers| %>
-                  <div class="badge badge-primary badge-sm">
-                    <%= source_name %>
-                    <% if year.present? && source_name.exclude?(year.to_s) %>
-                      (<%= year %>)
-                    <% end %>
-                    <% if source_page_numbers&.any? %>
-                      (page <%= source_page_numbers.to_sentence %>)
-                    <% end %>
-                  </div>
+                <% @political_entity.interests.joins(:source).group(:source_id, :source_page_numbers).each do |interest| %>
+                  <%= render "interests/source", interest: interest %>
                 <% end %>
               </div>
             </div>
