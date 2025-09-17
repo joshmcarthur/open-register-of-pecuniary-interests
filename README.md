@@ -193,3 +193,7 @@ The container uses `/rails/bin/docker-entrypoint` to prepare the database and st
 - "GEMINI_API_KEY/ANTHROPIC_API_KEY missing": set them in your shell or `.env` when running `import:serialize`.
 - Import category warnings: if a section key does not match an `InterestCategory.key`, the importer prints a warning and skips those items.
 - If images fail to fetch, the Wikimedia service may not have a suitable page; try a different name variant.
+
+# License
+
+This project is licensed under the AGPL-3.0 license. See the [LICENSE](LICENSE) file for details.
