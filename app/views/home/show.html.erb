@@ -127,28 +127,6 @@
   </div>
 
     <!-- Data Source Information -->
-  <div class="bg-base-100 border border-base-300 rounded-lg p-6 my-8">
-    <div class="flex items-start gap-3">
-      <div class="flex-shrink-0 mt-1">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      </div>
-      <div class="flex-1">
-        <h3 class="font-medium text-base-content mb-2">About This Data</h3>
-        <p class="text-sm text-base-content/80 leading-relaxed mb-2">
-            New Zealand elected officials are legally required to declare their financial interests publicly. Councils must maintain registers of their members' pecuniary interests under the Local Government Act 2002 (introduced November 2022), while Parliament maintains annual registers for MPs. These declarations include employment, shareholdings, property interests, gifts, and potential conflicts of interest. The legal framework promotes transparency, public trust, and helps citizens identify when elected officials may have competing financial interests in public decisions.
-        </p>
-        <p class="text-sm text-base-content/80 leading-relaxed">
-          This information has been extracted from official pecuniary interest register sources using AI technology and reviewed by an imperfect human.
-          Please report any errors or omissions to <strong><%= link_to "contact@orpi.joshmcarthur.com", "mailto:contact@orpi.joshmcarthur.com" %></strong>.
-        </p>
-        <div class="mt-3 text-xs text-base-content/60 space-y-1">
-          <p>• Each entry includes links to original source documents</p>
-          <p>• Data is regularly updated as new registers are published</p>
-          <p>• All information is sourced from official government publications</p>
-        </div>
-      </div>
-    </div>
-  </div>
+  <%= render "application/data_source_information" %>
+
 </div>

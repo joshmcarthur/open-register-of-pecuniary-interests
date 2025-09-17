@@ -1,0 +1,17 @@
+<% if interest.source.file.attached? %>
+  <a class="badge badge-primary badge-sm" href="<%= rails_blob_path(interest.source.file, anchor: "page=#{interest.source_page_numbers.first}") %>" target="_blank">
+<% else %>
+  <div class="badge badge-primary badge-sm">
+<% end %>
+  <%= interest.source.name %>
+  <% if interest.source.year.present? && interest.source.name.exclude?(interest.source.year.to_s) %>
+    (<%= interest.source.year %>)
+  <% end %>
+  <% if interest.source_page_numbers&.any? %>
+    (page <%= interest.source_page_numbers.to_sentence %>)
+  <% end %>
+<% if interest.source.file.attached? %>
+</a>
+<% else %>
+</div>
+<% end %>
