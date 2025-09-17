@@ -14,9 +14,12 @@ class Interest < ApplicationRecord
   after_destroy_commit :remove_from_search_index
 
   scope :search, ->(query) do
+    # Escape double quotes by doubling them, then wrap in double quotes
+    # This treats the entire string as a literal phrase
+    escaped_query = query.blank? ? "" : "\"#{query.to_s.gsub('"', '""')}\""
     joins("join interests_search_index idx on interests.id = idx.interest_id")
     .select("interests.*, idx.rank")
-    .where("interests_search_index match ?", query)
+    .where("interests_search_index match ?", escaped_query)
   end
 
   def self.rebuild_search_index
