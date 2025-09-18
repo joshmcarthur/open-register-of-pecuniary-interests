@@ -57,7 +57,7 @@ class PoliticalEntitiesTest < ApplicationSystemTestCase
     # Check jurisdiction information is displayed
     assert_text "NZ Parliament"
     assert_text "Auckland Central"
-    assert_text "Labour Party"
+    assert_selector "img[alt='Labour Party']"
   end
 
   test "political entity export functionality" do
@@ -108,7 +108,7 @@ class PoliticalEntitiesTest < ApplicationSystemTestCase
     visit political_entities_path
 
     # Apply party filter using the dropdown
-    select "Labour Party", from: "party"
+    select "Labour", from: "party"
     click_button "Apply Filters"
 
     # Should show Labour Party members
@@ -116,7 +116,7 @@ class PoliticalEntitiesTest < ApplicationSystemTestCase
     assert_text "Alice Brown" # Labour
 
     # Should show active filter badge
-    assert_selector ".badge", text: /Party.*Labour Party/
+    assert_selector ".badge", text: /Party.*Labour/
   end
 
 

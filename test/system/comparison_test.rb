@@ -63,13 +63,16 @@ class ComparisonTest < ApplicationSystemTestCase
     # Look for the table within the party statistics card
     within(".card", text: "Party Statistics") do
       # Should show Labour Party (2 members: John Smith, Alice Brown)
-      assert_text "Labour Party"
+      assert_selector "img[alt='Labour Party']"
+      assert_text "Labour"
 
       # Should show Green Party (1 member: Jane Doe)
-      assert_text "Green Party"
+      assert_selector "img[alt='Green Party']"
+      assert_text "Green"
 
       # Should show National Party (1 member: Bob Wilson)
-      assert_text "National Party"
+      assert_selector "img[alt='National Party']"
+      assert_text "National"
 
       # Check table headers
       assert_text "Party"

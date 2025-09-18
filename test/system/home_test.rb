@@ -6,7 +6,7 @@ class HomeTest < ApplicationSystemTestCase
 
     # Check main heading and content
     assert_text "Open Register of Pecuniary Interests"
-    assert_text "A simple way to see what companies, properties and investments your elected officials have declared"
+    assert_text "See what companies, properties, and investments your elected officials have declared."
 
     # Check search form is present
     assert_selector "form[role='search']"

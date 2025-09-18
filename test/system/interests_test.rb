@@ -6,7 +6,7 @@ class InterestsTest < ApplicationSystemTestCase
 
     # Check page structure
     assert_text "Interests"
-    assert_text "Browse and filter interests by jurisdiction, party affiliation, and interest categories."
+    assert_text "Browse and filter financial interests of political representatives"
 
     # Check search form
     assert_selector "form[role='search']"
@@ -75,7 +75,7 @@ class InterestsTest < ApplicationSystemTestCase
     visit interests_path
 
     # Apply party filter
-    select "Labour Party", from: "party"
+    select "Labour", from: "party"
     click_button "Apply Filters"
 
     # Should show only Labour Party interests
@@ -85,7 +85,7 @@ class InterestsTest < ApplicationSystemTestCase
     assert_no_text "Trustee of Wilson Family Trust" # Bob Wilson - National Party
 
     # Check active filter badge
-    assert_selector ".badge", text: /Party.*Labour Party/
+    assert_selector ".badge", text: /Party.*Labour/
   end
 
   test "filtering interests by category" do
@@ -109,7 +109,7 @@ class InterestsTest < ApplicationSystemTestCase
 
     # Apply multiple filters
     select "NZ Parliament", from: "jurisdiction"
-    select "Labour Party", from: "party"
+    select "Labour", from: "party"
     click_button "Apply Filters"
 
     # Should show only Labour MPs' interests
@@ -120,7 +120,7 @@ class InterestsTest < ApplicationSystemTestCase
 
     # Check multiple active filter badges
     assert_selector ".badge", text: /Jurisdiction.*NZ Parliament/
-    assert_selector ".badge", text: /Party.*Labour Party/
+    assert_selector ".badge", text: /Party.*Labour/
   end
 
   test "clearing all filters" do
@@ -128,12 +128,12 @@ class InterestsTest < ApplicationSystemTestCase
 
     # Apply some filters
     select "NZ Parliament", from: "jurisdiction"
-    select "Labour Party", from: "party"
+    select "Labour", from: "party"
     click_button "Apply Filters"
 
     # Verify filters are active
     assert_selector ".badge", text: /Jurisdiction.*NZ Parliament/
-    assert_selector ".badge", text: /Party.*Labour Party/
+    assert_selector ".badge", text: /Party.*Labour/
 
     # Clear all filters
     click_link "Clear Filters"
@@ -173,7 +173,7 @@ class InterestsTest < ApplicationSystemTestCase
     visit interests_path
 
     # Apply a filter first
-    select "Labour Party", from: "party"
+    select "Labour", from: "party"
     click_button "Apply Filters"
 
     # Then search
@@ -182,9 +182,9 @@ class InterestsTest < ApplicationSystemTestCase
 
     # Should maintain the party filter in search
     assert_text "Search results for \"Smith\""
-    assert_selector ".badge", text: /Party.*Labour Party/
+    assert_selector ".badge", text: /Party.*Labour/
 
     # Hidden fields should preserve filters
-    assert_selector "input[name='party'][type='hidden'][value='Labour Party']", visible: false
+    assert_selector "input[name='party'][type='hidden'][value='Labour']", visible: false
   end
 end

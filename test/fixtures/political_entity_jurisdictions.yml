@@ -3,7 +3,7 @@ john_smith_parliament:
   jurisdiction: nz_parliament
   role: member
   electorate: Auckland Central
-  affiliation: Labour Party
+  affiliation: Labour
   start_date: 2023-10-14
   end_date:
 
@@ -12,7 +12,7 @@ jane_doe_wellington:
   jurisdiction: wellington_council
   role: councillor
   electorate:
-  affiliation: Green Party
+  affiliation: Green
   start_date: 2022-10-08
   end_date:
 
@@ -21,7 +21,7 @@ bob_wilson_canterbury:
   jurisdiction: canterbury_regional
   role: councillor
   electorate:
-  affiliation: National Party
+  affiliation: National
   start_date: 2022-10-08
   end_date:
 
@@ -30,6 +30,6 @@ alice_brown_parliament:
   jurisdiction: nz_parliament
   role: member
   electorate: Christchurch East
-  affiliation: Labour Party
+  affiliation: Labour
   start_date: 2023-10-14
   end_date:

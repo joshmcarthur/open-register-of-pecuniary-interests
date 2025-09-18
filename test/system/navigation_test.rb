@@ -85,11 +85,11 @@ class NavigationTest < ApplicationSystemTestCase
     visit interests_path
 
     # Apply a filter
-    select "Labour Party", from: "party"
+    select "Labour", from: "party"
     click_button "Apply Filters"
 
     # Should show filtered results
-    assert_selector ".badge", text: /Party.*Labour Party/
+    assert_selector ".badge", text: /Party.*Labour/
 
     # Clear filters to return to browsing
     click_link "Clear Filters"
