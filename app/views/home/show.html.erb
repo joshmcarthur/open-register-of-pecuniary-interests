@@ -2,15 +2,19 @@
   <!-- Hero Section -->
   <div class="hero min-h-[500px] bg-gradient-to-br from-primary/10 via-base-200 to-secondary/10 rounded-2xl shadow-2xl">
     <div class="hero-content text-center">
-      <div class="max-w-2xl">
+      <div class="max-w-4xl">
         <div class="mb-6">
           <div class="badge badge-primary badge-lg mb-4">Transparency in Politics</div>
           <h1 class="text-6xl font-bold text-base-content leading-tight">
-            Open Register of <span class="text-primary">Pecuniary</span> Interests
+            NZ Open Register of <span class="text-primary">Pecuniary</span> Interests
           </h1>
+          <p class="text-lg text-base-content/60 mt-2">
+            ('pecuniary' is a formal word for 'financial')
+          </p>
         </div>
         <p class="text-xl text-base-content/80 mb-8 leading-relaxed">
-          A simple way to see what companies, properties and investments your elected officials have declared
+          See what companies, properties, and investments your elected officials have declared.
+          <strong class="font-semibold">Transparency helps you make informed decisions about who represents you.</strong>
         </p>
 
         <div class="w-full max-w-xxl mx-auto">
@@ -24,7 +28,6 @@
       </div>
     </div>
   </div>
-
 
   <!-- CTA Cards Section -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 my-12">
@@ -126,7 +129,82 @@
     </div>
   </div>
 
-    <!-- Data Source Information -->
-  <%= render "application/data_source_information" %>
+  <!-- Combined Explanation & Action Section -->
+  <div class="bg-base-100 border border-base-300 rounded-2xl p-8 my-12">
+    <div class="mx-auto">
+      <h2 class="text-3xl font-bold text-center mb-8">What is this all about?</h2>
 
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <!-- Left side: What are pecuniary interests -->
+        <div>
+          <h3 class="text-xl font-semibold mb-4 text-primary">What are financial interests?</h3>
+          <p class="text-lg leading-relaxed mb-4">
+            <strong>"Pecuniary"</strong> simply means <strong>"relating to money"</strong>.
+            These are the financial interests that politicians must legally declare - things like:
+          </p>
+          <ul class="space-y-2 text-base-content/80 mb-4">
+            <li>• Company directorships and shareholdings</li>
+            <li>• Property investments</li>
+            <li>• Employment and consulting work</li>
+            <li>• Gifts and travel</li>
+            <li>• Debts and financial relationships</li>
+          </ul>
+          <div class="bg-accent/10 border border-accent/20 rounded-lg p-4">
+            <p class="font-medium text-accent">
+              💡 <strong>Example:</strong> If an MP votes on environmental policy while
+              holding shares in a mining company, that's a potential conflict of interest.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="text-xl font-semibold mb-4 text-secondary">How can this information help you?</h3>
+
+          <div class="space-y-4">
+            <div class="flex items-start gap-3">
+              <div class="flex-shrink-0 p-2 rounded-full bg-primary/10">
+                <%= render 'shared/icons/search', class: 'h-6 w-6 text-primary' %>
+              </div>
+              <div>
+                <h4 class="font-semibold">Research & Verify</h4>
+                <p class="text-sm text-base-content/70">Use this as a starting point for your own research. Check original sources and follow up on anything that concerns you.</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3">
+              <div class="flex-shrink-0 p-2 rounded-full bg-secondary/10">
+                <%= render 'shared/icons/vote', class: 'h-6 w-6 text-secondary' %>
+              </div>
+              <div>
+                <h4 class="font-semibold">Make Informed Votes</h4>
+                <p class="text-sm text-base-content/70">Consider these interests when deciding who to vote for. Ask candidates about potential conflicts during elections.</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3">
+              <div class="flex-shrink-0 p-2 rounded-full bg-accent/10">
+                <%= render 'shared/icons/chat', class: 'h-6 w-6 text-accent' %>
+              </div>
+              <div>
+                <h4 class="font-semibold">Engage & Discuss</h4>
+                <p class="text-sm text-base-content/70">Share your findings, ask questions at public meetings, or contact your representatives directly.</p>
+              </div>
+            </div>
+
+             <div class="bg-gradient-to-r from-primary/5 to-secondary/5 border border-primary/20 rounded-lg p-4 text-center">
+              <p class="text-base-content/80">
+                <strong>Having financial interests isn't necessarily wrong</strong> - it's about ensuring representatives are open about potential conflicts so we can make informed decisions.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom reminder -->
+
+    </div>
+  </div>
+
+  <!-- Data Source Information -->
+  <%= render "application/data_source_information" %>
 </div>
