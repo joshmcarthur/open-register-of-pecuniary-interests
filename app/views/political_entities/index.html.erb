@@ -110,7 +110,7 @@
                   <% if entity.profile_image.attached? %>
                     <div class="avatar">
                       <div class="w-16 rounded-xl">
-                        <%= image_tag entity.profile_image,
+                        <%= image_tag entity.profile_image.variant(:small),
                             alt: entity.name %>
                       </div>
                     </div>

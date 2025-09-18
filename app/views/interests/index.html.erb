@@ -165,7 +165,7 @@
                   <% if interest.political_entity.profile_image.attached? %>
                     <div class="avatar avatar-sm">
                       <div class="w-8 rounded">
-                        <%= image_tag interest.political_entity.profile_image,
+                        <%= image_tag interest.political_entity.profile_image.variant(:small),
                             alt: interest.political_entity.name %>
                       </div>
                     </div>

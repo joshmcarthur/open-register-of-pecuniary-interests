@@ -14,7 +14,7 @@
               <% if @political_entity.profile_image.attached? %>
                 <div class="avatar">
                   <div class="w-32 h-32 rounded-2xl shadow-lg">
-                    <%= image_tag @political_entity.profile_image,
+                    <%= image_tag @political_entity.profile_image.variant(:thumbnail),
                         alt: @political_entity.name,
                         class: "rounded-2xl object-cover" %>
                   </div>
@@ -287,7 +287,7 @@
               <div class="flex items-center gap-3">
                 <div class="avatar">
                   <div class="w-12 h-12 rounded-lg">
-                    <%= image_tag @political_entity.profile_image,
+                    <%= image_tag @political_entity.profile_image.variant(:small),
                         alt: @political_entity.name,
                         class: "rounded-lg object-cover" %>
                   </div>
