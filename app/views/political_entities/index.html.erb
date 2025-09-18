@@ -105,9 +105,8 @@
           <div class="card bg-base-100 shadow-xl border border-base-300 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
             <div class="card-body">
               <!-- Entity Header with Profile Image -->
-              <div class="flex justify-between items-start mb-4">
-                <div class="flex items-center gap-3">
-                  <% if entity.profile_image.attached? %>
+              <div class="flex items-center gap-3">
+                <% if entity.profile_image.attached? %>
                     <div class="avatar">
                       <div class="w-16 rounded-xl">
                         <%= image_tag entity.profile_image.variant(:small),
@@ -123,16 +122,25 @@
                       </div>
                     </div>
                   <% end %>
-                  <div>
-                    <h3 class="card-title text-xl leading-tight">
-                      <%= link_to entity.name, political_entity_path(entity),
-                          class: "link link-hover text-primary" %>
-                    </h3>
+                  <div class="flex-1">
+                    <div class="flex flex-row gap-1" >
+                      <h3 class="card-title text-xl leading-tight flex-1">
+                        <%= link_to entity.name, political_entity_path(entity),
+                            class: "link link-hover text-primary" %>
+                      </h3>
+                      <!-- Party Affiliations -->
+                      <% parties = entity.political_entity_jurisdictions.where.not(affiliation: [nil, ""]).distinct.pluck(:affiliation) %>
+                      <div class="flex flex-wrap gap-1 items-start">
+                        <% parties.each do |party| %>
+                            <%= political_party_badge(party, class: "w-18") %>
+                        <% end %>
+                      </div>
+                    </div>
                     <div class="flex flex-wrap gap-1 mt-2">
                       <!-- Jurisdictions -->
                       <% entity.jurisdictions.limit(3).each do |jurisdiction| %>
                         <% pej = entity.political_entity_jurisdictions.find_by(jurisdiction: jurisdiction) %>
-                        <div class="badge badge-primary badge-sm">
+                        <div class="">
                           <%= jurisdiction.name %>
                           <% if pej&.role.present? %>
                             <span class="ml-1 text-xs opacity-75">(<%= pej.role %>)</span>
@@ -144,29 +152,9 @@
                           +<%= entity.jurisdictions.count - 3 %> more
                         </div>
                       <% end %>
-                      <!-- Party Affiliations -->
-                      <% parties = entity.political_entity_jurisdictions.where.not(affiliation: [nil, ""]).distinct.pluck(:affiliation) %>
-                      <% parties.each do |party| %>
-                        <div class="badge badge-secondary badge-sm"><%= party %></div>
-                      <% end %>
                     </div>
                   </div>
                 </div>
-                <div class="dropdown dropdown-end">
-                  <div tabindex="0" role="button" class="btn btn-ghost btn-sm btn-circle">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-5 h-5 stroke-current">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01"></path>
-                    </svg>
-                  </div>
-                  <ul tabindex="0" class="dropdown-content z-[1] menu p-3 shadow-lg bg-base-100 rounded-box w-64 border border-base-300">
-                    <li class="menu-title">
-                      <span>Quick Actions</span>
-                    </li>
-                    <li><%= link_to "View Details", political_entity_path(entity), class: "text-sm" %></li>
-                    <li><%= link_to "Export CSV", export_political_entity_path(entity), class: "text-sm" %></li>
-                  </ul>
-                </div>
-              </div>
 
               <!-- Description -->
               <% if entity.description.present? %>
@@ -178,11 +166,11 @@
 
               <!-- Interest Count -->
               <div class="card-actions justify-between items-center">
-                <div class="stats stats-horizontal shadow-sm bg-base-200 rounded-lg">
-                  <div class="stat py-2 px-3">
-                    <div class="stat-title text-xs">Interests</div>
-                    <div class="stat-value text-sm text-primary"><%= entity.interests.count %></div>
+                <div class="font-medium">
+                  <div class="badge badge-primary badge-sm">
+                    <%= entity.interests.count %>
                   </div>
+                  Interests
                 </div>
                 <%= link_to "View Details", political_entity_path(entity),
                     class: "btn btn-primary btn-sm" %>

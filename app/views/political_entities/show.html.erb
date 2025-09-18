@@ -30,25 +30,24 @@
               <% end %>
               <div class="text-center lg:text-left">
                 <hgroup>
-                  <h1 class="text-5xl font-bold mb-4 text-base-content"><%= @political_entity.name %></h1>
-                  <div class="flex flex-wrap gap-1 mt-2">
+                  <h1 class="text-5xl font-bold mb-2 text-base-content"><%= @political_entity.name %></h1>
+
+                  <div class="flex flex-wrap gap-1 mb-2">
                     <!-- Jurisdictions -->
                     <% @political_entity.jurisdictions.each do |jurisdiction| %>
                       <% pej = @political_entity.political_entity_jurisdictions.find_by(jurisdiction: jurisdiction) %>
-                      <div class="badge badge-primary badge-xl">
+                      <div class="">
                         <%= jurisdiction.name %>
                         <% if pej&.role.present? %>
-                          <span class="ml-1 text-xs opacity-75">(<%= pej.role %>)</span>
+                          <span class="ml-1 opacity-75">(<%= pej.role %>)</span>
                         <% end %>
                       </div>
                     <% end %>
-
-                    <!-- Party Affiliations -->
-                    <% parties = @political_entity.political_entity_jurisdictions.where.not(affiliation: [nil, ""]).distinct.pluck(:affiliation) %>
-                    <% parties.each do |party| %>
-                      <div class="badge badge-secondary badge-xl"><%= party %></div>
-                    <% end %>
                   </div>
+                  <% parties = @political_entity.political_entity_jurisdictions.where.not(affiliation: [nil, ""]).distinct.pluck(:affiliation) %>
+                  <% parties.each do |party| %>
+                    <%= political_party_badge(party, class: "w-32 mx-auto lg:mx-0") %>
+                  <% end %>
                 </hgroup>
                 <% if @political_entity.description.present? %>
                   <p class="text-xl text-base-content/80 mb-6 leading-relaxed"><%= @political_entity.description %></p>
