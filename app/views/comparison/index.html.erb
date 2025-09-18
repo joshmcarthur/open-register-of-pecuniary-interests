@@ -7,7 +7,7 @@
       <div class="max-w-4xl">
         <div class="mb-6">
           <div class="badge badge-primary badge-lg mb-4">Data Analysis</div>
-          <h1 class="text-6xl font-bold text-base-content leading-tight">
+          <h1 class="text-4xl md:text-6xl font-bold text-base-content leading-tight">
             Political Interest <span class="text-primary">Comparison</span>
           </h1>
         </div>
@@ -169,6 +169,7 @@
             <% @party_stats.each do |party| %>
               <tr>
                 <td>
+                  <%= political_party_badge(party[:name], class: "w-24 display-inline-block") %>
                   <div class="font-medium"><%= party[:name] %></div>
                 </td>
                 <td>

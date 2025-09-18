@@ -25,4 +25,6 @@
   --color-warning-content: oklch(0% 0 0);
   --color-error: oklch(71.76% .221 22.18);
   --color-error-content: oklch(0% 0 0);
+@utility badge {
+  @apply h-auto;
 }

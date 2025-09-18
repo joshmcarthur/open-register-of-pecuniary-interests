@@ -5,10 +5,10 @@
 <div class="container py-12 mx-auto px-4 sm:px-6 lg:px-8">
   <!-- Header Section -->
   <div class="hero min-h-[300px] bg-gradient-to-br from-primary/10 via-base-200 to-secondary/10 rounded-2xl shadow-2xl mb-12">
-    <div class="hero-content w-full flex flex-row justify-between h-full">
+    <div class="hero-content w-full flex flex-col lg:flex-row justify-between h-full">
       <!-- Title Section -->
-      <div class="text-left">
-        <h1 class="text-5xl font-bold mb-4 text-base-content">Political Entities</h1>
+      <div class="text-center lg:text-left">
+        <h1 class="text-4xl lg:text-5xl font-bold mb-4 text-base-content">Political Entities</h1>
         <p class="text-xl text-base-content/80 mb-6 leading-relaxed">
           Browse and filter political representatives by jurisdiction, party affiliation, and interest categories.
         </p>
@@ -28,8 +28,8 @@
       </div>
 
       <!-- Results Summary -->
-      <div class="flex justify-center">
-        <div class="stats stats-horizontal shadow-lg bg-base-100 border border-base-300 rounded-2xl">
+      <div class="flex justify-center w-full">
+        <div class="stats stats-horizontal lg:shadow-lg bg-base-100 border border-base-300 rounded-2xl w-full">
           <div class="stat">
             <div class="stat-figure text-primary">
               <%= render 'shared/icons/building', class: 'inline-block w-8 h-8 stroke-current' %>
