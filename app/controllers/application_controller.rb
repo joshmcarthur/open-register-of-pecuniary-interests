@@ -1,7 +1,4 @@
 class ApplicationController < ActionController::Base
-  # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
-  allow_browser versions: :modern
-
   # Set default cache headers for all actions
   # Since this is a read-only database, we can cache aggressively
   before_action :set_default_cache_headers
