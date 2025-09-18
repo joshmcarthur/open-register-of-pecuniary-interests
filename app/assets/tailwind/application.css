@@ -5,12 +5,51 @@
 @source "../../../app/views/**/*";
 
 @plugin "daisyui" {
-  themes: emerald --default, dark --prefersdark;
+  themes: orpi --default, orpi-dark --prefersdark;
 }
 
 @plugin "daisyui/theme" {
-  name: "dark";
+  name: "orpi";
+  default: true;
+  prefersdark: false;
+  color-scheme: "light";
+  --color-base-100: oklch(98% 0.002 247.839);
+  --color-base-200: oklch(96% 0.003 264.542);
+  --color-base-300: oklch(92% 0.006 264.531);
+  --color-base-content: oklch(21% 0.034 264.665);
+  --color-primary: oklch(78% 0.115 274.713);
+  --color-primary-content: oklch(25% 0.09 281.288);
+  --color-secondary: oklch(80% 0.114 19.571);
+  --color-secondary-content: oklch(25% 0.092 26.042);
+  --color-accent: oklch(80% 0.105 251.813);
+  --color-accent-content: oklch(28% 0.091 267.935);
+  --color-neutral: oklch(44% 0.03 256.802);
+  --color-neutral-content: oklch(98% 0.002 247.839);
+  --color-info: oklch(54% 0.245 262.881);
+  --color-info-content: oklch(97% 0.014 254.604);
+  --color-success: oklch(59% 0.145 163.225);
+  --color-success-content: oklch(97% 0.021 166.113);
+  --color-warning: oklch(66% 0.179 58.318);
+  --color-warning-content: oklch(98% 0.022 95.277);
+  --color-error: oklch(59% 0.249 0.584);
+  --color-error-content: oklch(97% 0.014 343.198);
+  --radius-selector: 0.5rem;
+  --radius-field: 2rem;
+  --radius-box: 0.25rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 2px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@plugin "daisyui/theme" {
+  name: "orpi-dark";
   prefersdark: true;
+  --color-base-100: oklch(25.33% 0.016 252.42);
+  --color-base-200: oklch(23.26% 0.014 253.1);
+  --color-base-300: oklch(21.15% 0.012 254.09);
+  --color-base-content: oklch(97.807% 0.029 256.847);
   --color-primary: oklch(76.662% .135 153.45);
   --color-primary-content: oklch(33.387% .04 162.24);
   --color-secondary: oklch(61.302% .202 261.294);
@@ -25,6 +64,16 @@
   --color-warning-content: oklch(0% 0 0);
   --color-error: oklch(71.76% .221 22.18);
   --color-error-content: oklch(0% 0 0);
+  --radius-selector: 0.5rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.5rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+}
+
 @utility badge {
   @apply h-auto;
 }
