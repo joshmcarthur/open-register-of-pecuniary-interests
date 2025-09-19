@@ -48,7 +48,7 @@ class HomeTest < ApplicationSystemTestCase
 
     # Test Browse Parliament link
     click_link "Browse", match: :first
-    assert_current_path political_entities_path(jurisdiction: "new-zealand-parliament")
+    assert_current_path political_entities_path(jurisdiction_type: [ "parliament" ])
 
     visit root_path
 
@@ -65,8 +65,8 @@ class HomeTest < ApplicationSystemTestCase
     visit root_path
 
     # Test Browse Councils link
-    click_link "Browse", href: political_entities_path(jurisdiction: "greater-wellington-regional-council")
-    assert_current_path political_entities_path(jurisdiction: "greater-wellington-regional-council")
+    click_link "Browse", href: political_entities_path(jurisdiction_type: [ "local_council", "regional_council" ])
+    assert_current_path political_entities_path(jurisdiction_type: [ "local_council", "regional_council" ])
   end
 
   test "responsive design elements" do

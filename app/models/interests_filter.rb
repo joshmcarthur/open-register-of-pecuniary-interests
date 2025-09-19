@@ -10,6 +10,8 @@ class InterestsFilter
               :jurisdictions,
               :parties,
               :interest_categories,
+              :jurisdiction_types,
+              :jurisdiction_type_filter,
               :pagination,
               :query,
               :source_filter,
@@ -22,6 +24,7 @@ class InterestsFilter
     @jurisdiction_filter = params[:jurisdiction]
     @party_filter = params[:party]
     @interest_category_filter = params[:interest_category]
+    @jurisdiction_type_filter = Array(params[:jurisdiction_type]).reject(&:blank?)
     @source_filter = params[:source]
     @current_page = [ params[:page].to_i, 1 ].max
 
@@ -30,6 +33,7 @@ class InterestsFilter
     @parties = load_parties
     @sources = load_sources
     @interest_categories = load_interest_categories
+    @jurisdiction_types = load_jurisdiction_types
 
     # Calculate overall relation, then paginate and order if required
     @relation = build_relation
@@ -58,6 +62,7 @@ class InterestsFilter
     filters << { type: :jurisdiction, value: @jurisdiction_filter, label: jurisdiction_label } if @jurisdiction_filter.present?
     filters << { type: :party, value: @party_filter, label: @party_filter } if @party_filter.present?
     filters << { type: :interest_category, value: @interest_category_filter, label: interest_category_label } if @interest_category_filter.present?
+    filters << { type: :jurisdiction_type, value: @jurisdiction_type_filter, label: jurisdiction_type_label } if @jurisdiction_type_filter.any?
     filters << { type: :source, value: @source_filter, label: source_label } if @source_filter.present?
     filters
   end
@@ -110,12 +115,21 @@ class InterestsFilter
     relation = apply_party_filter(relation) if @party_filter.present?
     relation = apply_interest_category_filter(relation) if @interest_category_filter.present?
     relation = apply_source_filter(relation) if @source_filter.present?
+    relation = apply_jurisdiction_type_filter(relation) if @jurisdiction_type_filter.any?
 
     relation
   end
 
 
   private
+
+  def load_jurisdiction_types
+    Jurisdiction.distinct.pluck(:jurisdiction_type).compact.sort
+  end
+
+  def apply_jurisdiction_type_filter(interests)
+    interests.where(jurisdictions: { jurisdiction_type: @jurisdiction_type_filter })
+  end
 
   def apply_jurisdiction_filter(interests)
     interests.where(jurisdictions: { slug: @jurisdiction_filter })
@@ -155,6 +169,12 @@ class InterestsFilter
 
   def interest_category_label
     @interest_categories.find_by(key: @interest_category_filter)&.label if @interest_category_filter.present?
+  end
+
+  def jurisdiction_type_label
+    if @jurisdiction_type_filter.any?
+      @jurisdiction_type_filter.map { |type| type.humanize }.join(", ")
+    end
   end
 
   def source_label

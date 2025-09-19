@@ -81,7 +81,7 @@
         <!-- Preserve search query -->
         <%= form.hidden_field :q, value: @filter.query if @filter.query.present? %>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
           <!-- Jurisdiction Filter -->
           <div class="form-control">
             <label class="label">
@@ -113,6 +113,25 @@
                 options_from_collection_for_select(@filter.interest_categories, :key, :label, @filter.interest_category_filter),
                 { prompt: "All Categories" },
                 { class: "select select-bordered w-full" } %>
+          </div>
+
+          <!-- Jurisdiction Type Filter -->
+           <div class="form-control">
+            <label class="label" for="jurisdiction_type_0">
+              <span class="label-text font-semibold">Jurisdiction Type</span>
+            </label>
+            <div class="flex flex-wrap gap-2">
+              <% @filter.jurisdiction_types.each_with_index do |type, index| %>
+                <% checked = @filter.jurisdiction_type_filter.include?(type) %>
+                <input class="btn"
+                       type="checkbox"
+                       id="jurisdiction_type_<%= index %>"
+                       name="jurisdiction_type[]"
+                       value="<%= type %>"
+                       aria-label="<%= type.humanize %>"
+                       <%= "checked" if checked %> />
+              <% end %>
+            </div>
           </div>
         </div>
 

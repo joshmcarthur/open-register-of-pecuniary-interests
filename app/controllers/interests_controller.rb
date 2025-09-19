@@ -34,7 +34,7 @@ class InterestsController < ApplicationController
   private
 
   def filter_params
-    params.permit(:jurisdiction, :party, :interest_category, :source, :page, :q)
+    params.permit(:jurisdiction, :party, :interest_category, :source, :page, :q, jurisdiction_type: [])
   end
 
   def cache_key_for_current_data

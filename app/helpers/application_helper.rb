@@ -7,6 +7,8 @@ module ApplicationHelper
       "badge-secondary"
     when :interest_category
       "badge-accent"
+    when :jurisdiction_type
+      "badge-base-200"
     when :source
       "badge-warning"
     else

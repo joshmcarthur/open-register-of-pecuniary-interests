@@ -41,7 +41,7 @@
         </div>
         <p class="text-base-content/70">Current MPs and their declared interests</p>
         <div class="card-actions justify-end mt-4">
-          <a href="<%= political_entities_path(jurisdiction: 'new-zealand-parliament') %>" class="btn btn-primary btn-sm">Browse</a>
+          <a href="<%= political_entities_path(jurisdiction_type: ['parliament']) %>" class="btn btn-primary btn-sm">Browse</a>
         </div>
       </div>
     </div>
@@ -86,7 +86,7 @@
         </div>
         <p class="text-base-content/50">Local government representatives</p>
         <div class="card-actions justify-end mt-4">
-          <%= link_to "Browse", political_entities_path(jurisdiction: 'greater-wellington-regional-council'), class: "btn btn-base-content/50 btn-sm" %>
+          <%= link_to "Browse", political_entities_path(jurisdiction_type: %w[local_council regional_council]), class: "btn btn-base-content/50 btn-sm" %>
         </div>
       </div>
     </div>

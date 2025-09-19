@@ -38,7 +38,7 @@ class PoliticalEntitiesController < ApplicationController
   private
 
   def filter_params
-    params.permit(:jurisdiction, :party, :interest_category)
+    params.permit(:jurisdiction, :party, :interest_category, jurisdiction_type: [])
   end
 
   def cache_key_for_current_data
