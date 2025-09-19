@@ -14,7 +14,7 @@ namespace :import do
     puts "Starting import from #{file_path}..."
 
     source = Source.find_by!(id: source_id)
-    jurisdiction = Jurisdiction.find_by(id: jurisdiction_id) || Jursidiction.find_by!(slug: jurisdiction_id)
+    jurisdiction = Jurisdiction.find_by(id: jurisdiction_id) || Jurisdiction.find_by!(slug: jurisdiction_id)
 
     # Get all interest categories for quick lookup
     interest_categories = InterestCategory.all.index_by(&:key)
