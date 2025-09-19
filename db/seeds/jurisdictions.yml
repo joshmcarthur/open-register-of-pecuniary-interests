@@ -4,3 +4,6 @@
 - name: Greater Wellington Regional Council
   slug: greater-wellington-regional-council
   jurisdiction_type: regional_council
+- name: Wellington City Council
+  slug: wellington-city-council
+  jurisdiction_type: local_council

@@ -19,7 +19,7 @@ namespace :political_entities do
     entities.each_with_index do |entity, index|
       puts "Processing #{index + 1}/#{total}: #{entity.name}"
 
-      normalized_name = entity.name.gsub(/^Dr|Hon|Hon Dr|Rt Hon/, "").strip
+      normalized_name = entity.name.gsub(/^Dr|Hon|Hon Dr|Rt Hon|Cr|Mayor|Deputy Mayor/, "").strip
 
       # Skip if already has an image
       if entity.profile_image.attached? && !force
