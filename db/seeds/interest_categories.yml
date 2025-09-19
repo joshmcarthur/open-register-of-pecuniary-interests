@@ -28,3 +28,5 @@
   label: Discharged debts
 - key: payments_for_activities
   label: Payments for activities
+- key: appointments_to_organisations
+  label: Appointments to organisations

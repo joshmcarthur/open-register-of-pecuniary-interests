@@ -1,3 +1,6 @@
 - name: New Zealand Parliament
   slug: new-zealand-parliament
   jurisdiction_type: parliament
+- name: Greater Wellington Regional Council
+  slug: greater-wellington-regional-council
+  jurisdiction_type: regional_council
