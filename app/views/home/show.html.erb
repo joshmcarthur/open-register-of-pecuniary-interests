@@ -76,7 +76,7 @@
       </div>
     </div>
 
-    <div class="card bg-base-100 shadow-xl opacity-50">
+    <div class="card bg-base-100 shadow-xl">
       <div class="card-body">
         <div class="flex items-center gap-3 mb-3">
           <div class="p-3 rounded-full bg-base-300">
@@ -85,7 +85,9 @@
           <h2 class="card-title text-lg">Browse Councils</h2>
         </div>
         <p class="text-base-content/50">Local government representatives</p>
-        <div class="badge badge-secondary mt-4">Coming soon!</div>
+        <div class="card-actions justify-end mt-4">
+          <%= link_to "Browse", political_entities_path(jurisdiction: 'greater-wellington-regional-council'), class: "btn btn-base-content/50 btn-sm" %>
+        </div>
       </div>
     </div>
   </div>
