@@ -9,19 +9,74 @@ class WikimediaImageService
   end
 
   def fetch_profile_image
-    # First, search for the Wikipedia page
-    page_title = find_wikipedia_page
-    return nil unless page_title
-
-    # Then get the main image from that page
-    image_data = get_page_main_image(page_title)
+    # First, search for images directly on Wikimedia
+    image_data = find_wikimedia_image
     return nil unless image_data
 
+    # Optionally search for Wikipedia page if it exists
+    wikipedia_page_title = find_wikipedia_page
+
     # Download and return the image with metadata
-    download_image_with_metadata(image_data[:url], page_title, image_data[:filename])
+    download_image_with_metadata(
+      image_data[:url],
+      wikipedia_page_title,
+      image_data[:filename],
+      image_data[:title]
+    )
   end
 
   private
+
+  def find_wikimedia_image
+    # Search for images using the search API
+    search_params = {
+      action: "query",
+      list: "search",
+      srsearch: "#{@entity_name} filetype:bitmap",
+      srnamespace: 6, # File namespace
+      srlimit: 1,
+      format: "json"
+    }
+
+    response = make_request(search_params)
+    return nil unless response&.dig("query", "search")&.any?
+
+    # Get the first search result
+    first_result = response["query"]["search"].first
+    return nil unless first_result
+
+    # Get the full image details
+    get_image_details(first_result["title"])
+  end
+
+  def get_image_details(image_title)
+    # Remove "File:" prefix if present
+    clean_title = image_title.gsub(/^File:/, "")
+
+    image_params = {
+      action: "query",
+      titles: image_title,
+      prop: "imageinfo",
+      iiprop: "url|size|mime",
+      iiurlwidth: 512,
+      format: "json"
+    }
+
+    response = make_request(image_params)
+    pages = response&.dig("query", "pages")
+    return nil unless pages
+
+    # Get the first (and usually only) page result
+    page_data = pages.values.first
+    imageinfo = page_data&.dig("imageinfo")&.first
+    return nil unless imageinfo
+
+    {
+      url: imageinfo["url"] || imageinfo["thumburl"],
+      filename: clean_title,
+      title: image_title
+    }
+  end
 
   def find_wikipedia_page
     search_params = {
@@ -38,31 +93,7 @@ class WikimediaImageService
     response["query"]["search"].first["title"]
   end
 
-  def get_page_main_image(page_title)
-    image_params = {
-      action: "query",
-      titles: page_title,
-      prop: "pageimages",
-      piprop: "original",
-      format: "json"
-    }
-
-    response = make_request(image_params)
-    pages = response&.dig("query", "pages")
-    return nil unless pages
-
-    # Get the first (and usually only) page result
-    page_data = pages.values.first
-    original_image = page_data&.dig("original")
-    return nil unless original_image
-
-    {
-      url: original_image["source"],
-      filename: original_image["source"].split("/").last
-    }
-  end
-
-  def download_image_with_metadata(image_url, wikipedia_page_title, original_filename)
+  def download_image_with_metadata(image_url, wikipedia_page_title, original_filename, image_title)
     return nil unless image_url
 
     begin
@@ -75,8 +106,9 @@ class WikimediaImageService
       metadata = {
         source: "wikimedia",
         wikipedia_page: wikipedia_page_title,
-        wikipedia_url: "https://en.wikipedia.org/wiki/#{URI.encode_www_form_component(wikipedia_page_title)}",
+        wikipedia_url: wikipedia_page_title ? "https://en.wikipedia.org/wiki/#{URI.encode_www_form_component(wikipedia_page_title)}" : nil,
         wikimedia_url: image_url,
+        wikimedia_image_title: image_title,
         original_filename: original_filename,
         fetched_at: Time.current.iso8601,
         entity_name: @entity_name

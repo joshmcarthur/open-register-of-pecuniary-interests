@@ -1,9 +1,16 @@
 namespace :political_entities do
   desc "Fetch profile images for all political entities from Wikimedia"
-  task fetch_images: :environment do
+  task :fetch_images, [ :jurisdiction_slug ] =>  :environment do |task, args|
     puts "Starting to fetch profile images for political entities..."
 
+    jurisdiction_slug = args[:jurisdiction_slug]
     entities = PoliticalEntity.all
+
+    if jurisdiction_slug.present?
+      jurisdiction = Jurisdiction.find_by!(slug: jurisdiction_slug)
+      entities = jurisdiction.political_entities
+    end
+
     total = entities.count
     success_count = 0
     error_count = 0
@@ -16,12 +23,13 @@ namespace :political_entities do
 
       # Skip if already has an image
       if entity.profile_image.attached? && !force
-        puts "  ✓ Already has profile image from #{entity.image_source} (fetched: #{entity.image_fetched_at})"
+        puts "  ✓ Already has profile image"
         next
       end
 
       begin
-        service = WikimediaImageService.new(normalized_name)
+        # Add NZ to the name to increase the chances of finding an image that is correct
+        service = WikimediaImageService.new(normalized_name + " NZ")
         image_data = service.fetch_profile_image
 
         if image_data
