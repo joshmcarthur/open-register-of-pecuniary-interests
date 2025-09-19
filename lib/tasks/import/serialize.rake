@@ -38,7 +38,7 @@ namespace :import do
 
     puts "Step 2: Processing individual MPs using RubyLLM..."
     all = process_individuals(pdf_file, lookup_table, temp_dir, keep) do |individual_data|
-      output_file.puts(JSON.pretty_generate(individual_data))
+      output_file.puts(JSON.generate(individual_data))
       sleep delay
     end
 
@@ -185,21 +185,8 @@ namespace :import do
       - electorate: Their electorate or "List" if they're a list MP
       - sections: An object containing their financial interests organized by category
 
-      The categories are numbered 1-14 and represent:
-      1. Company directorships and controlling interests
-      2. Other companies and business entities
-      3. Employment
-      4. Trusts
-      5. Organisations seeking Government funding
-      6. Real property
-      7. Retirement schemes
-      8. Managed investment schemes
-      9. Debts owed to you
-      10. Debts owed by you
-      11. Overseas travel
-      12. Gifts
-      13. Discharged debts
-      14. Payments for activities
+      The categories are:
+      #{InterestCategory.all.map { |category| "#{category.id}.#{category.key}: #{category.label}" }.join("\n")}
 
       For each category, include the category number, category label, and an array of items/descriptions. If a category has no entries, include an empty array.
       For example:
@@ -209,6 +196,9 @@ namespace :import do
           "items": [ "Company 1", "Company 2" ]
         }
       }
+
+      The financial interests may not always be specified using the listed categories. Attempt to normalise the category
+      to the closest matching category, only adding a new category if it's not a close match.
 
 
       Individual Name: #{name}
