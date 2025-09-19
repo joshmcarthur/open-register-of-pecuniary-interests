@@ -1,7 +1,10 @@
 namespace :import do
   desc "Import political entities and interests from JSONL file"
-  task :json, [ :file ] => :environment do |t, args|
+  task :json, [ :file, :source, :jurisdiction, :role ] => :environment do |t, args|
     file_path = Rails.root.join(args[:file] || ENV["JSONL_FILE"])
+    source_id = args[:source] || ENV["SOURCE"] || (raise ArgumentError.new("SOURCE is required"))
+    jurisdiction_id = args[:jurisdiction] || ENV["JURISDICTION"] || raise(ArgumentError.new("JURISDICTION is required"))
+    role = args[:role] || ENV["ROLE"] || raise(ArgumentError.new("ROLE is required"))
 
     unless File.exist?(file_path)
       puts "Error: File #{file_path} not found"
@@ -10,17 +13,8 @@ namespace :import do
 
     puts "Starting import from #{file_path}..."
 
-    # Create or find the source
-    source = Source.find_or_create_by(name: "2025 Register of Pecuniary and Other Specified Interests") do |s|
-      s.year = 2025
-      s.description = "Register of Pecuniary and Other Specified Interests for 2025"
-    end
-
-    # Create or find the jurisdiction (assuming this is for New Zealand Parliament)
-    jurisdiction = Jurisdiction.find_or_create_by(name: "New Zealand Parliament") do |j|
-      j.jurisdiction_type = "parliament"
-      j.description = "New Zealand Parliament"
-    end
+    source = Source.find_by!(id: source_id)
+    jurisdiction = Jurisdiction.find_by(id: jurisdiction_id) || Jursidiction.find_by!(slug: jurisdiction_id)
 
     # Get all interest categories for quick lookup
     interest_categories = InterestCategory.all.index_by(&:key)
@@ -60,7 +54,6 @@ namespace :import do
         end
 
         # Create or find political entity jurisdiction
-        role = "Member of Parliament"
         affiliation = party.present? ? party : nil
 
         political_entity_jurisdiction = PoliticalEntityJurisdiction.find_or_create_by(
