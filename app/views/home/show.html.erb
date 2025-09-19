@@ -103,21 +103,21 @@
       <div class="stat-desc">Parliamentary representatives</div>
     </div>
 
-    <div class="stat opacity-50">
-      <div class="stat-figure text-secondary">
-        <%= render 'shared/icons/dollar', class: 'inline-block w-8 h-8 stroke-current' %>
+    <div class="stat">
+      <div class="stat-figure text-base-content/50">
+        <%= render 'shared/icons/building', class: 'inline-block w-8 h-8 stroke-current' %>
       </div>
-      <div class="stat-title">Total Interests</div>
-      <div class="stat-value text-secondary"><%= HomepageStats.instance.declared_interests_count %></div>
-      <div class="stat-desc">Interests found</div>
+      <div class="stat-title">Current Councillors</div>
+      <div class="stat-value text-base-content/50"><%= HomepageStats.instance.councillors_count %></div>
+      <div class="stat-desc">Local government representatives</div>
     </div>
 
     <div class="stat">
-      <div class="stat-figure text-accent">
+      <div class="stat-figure text-secondary">
         <%= render 'shared/icons/chart', class: 'inline-block w-8 h-8 stroke-current' %>
       </div>
       <div class="stat-title">Declared Interests</div>
-      <div class="stat-value text-accent"><%= HomepageStats.instance.declared_interests_count %></div>
+      <div class="stat-value text-secondary"><%= HomepageStats.instance.declared_interests_count %></div>
       <div class="stat-desc">Financial disclosures</div>
     </div>
 

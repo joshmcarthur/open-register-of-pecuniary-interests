@@ -18,11 +18,10 @@ class HomeTest < ApplicationSystemTestCase
     assert_text "Explore Interests"
     assert_text "Compare Parties"
     assert_text "Browse Councils"
-    assert_text "Coming soon!" # For councils card
 
     # Check stats section displays
     assert_text "Current MPs"
-    assert_text "Total Interests"
+    assert_text "Current Councillors"
     assert_text "Declared Interests"
     assert_text "Latest Data"
 
@@ -48,7 +47,7 @@ class HomeTest < ApplicationSystemTestCase
     visit root_path
 
     # Test Browse Parliament link
-    click_link "Browse"
+    click_link "Browse", match: :first
     assert_current_path political_entities_path(jurisdiction: "new-zealand-parliament")
 
     visit root_path
@@ -62,6 +61,12 @@ class HomeTest < ApplicationSystemTestCase
     # Test Compare Parties link
     click_link "Compare"
     assert_current_path comparison_index_path
+
+    visit root_path
+
+    # Test Browse Councils link
+    click_link "Browse", href: political_entities_path(jurisdiction: "greater-wellington-regional-council")
+    assert_current_path political_entities_path(jurisdiction: "greater-wellington-regional-council")
   end
 
   test "responsive design elements" do

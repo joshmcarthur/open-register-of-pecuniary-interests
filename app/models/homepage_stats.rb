@@ -1,11 +1,11 @@
 class HomepageStats
   include Singleton
 
-  attr_reader :mps_count, :council_members_count, :declared_interests_count, :latest_data_year
+  attr_reader :mps_count, :councillors_count, :declared_interests_count, :latest_data_year
 
   def initialize
     @mps_count = calculate_mps_count
-    @council_members_count = calculate_council_members_count
+    @councillors_count = calculate_councillors_count
     @declared_interests_count = calculate_declared_interests_count
     @latest_data_year = calculate_latest_data_year
   end
@@ -24,7 +24,7 @@ class HomepageStats
                    .count
   end
 
-  def calculate_council_members_count
+  def calculate_councillors_count
     # Count political entities who have at least one non-parliamentary jurisdiction
     PoliticalEntity.joins(:jurisdictions)
                    .where.not(jurisdictions: { jurisdiction_type: "parliament" })
