@@ -59,7 +59,7 @@
               <span class="label-text font-semibold">Jurisdiction</span>
             </label>
             <%= form.select :jurisdiction,
-                options_from_collection_for_select(@filter.jurisdictions, :id, :name, @filter.jurisdiction_filter),
+                options_from_collection_for_select(@filter.jurisdictions, :slug, :name, @filter.jurisdiction_filter),
                 { prompt: "All Jurisdictions" },
                 { class: "select select-bordered w-full" } %>
           </div>
