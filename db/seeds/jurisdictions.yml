@@ -10,3 +10,6 @@
 - name: South Wairarapa District Council
   slug: south-wairarapa-district-council
   jurisdiction_type: local_council
+- name: Auckland Council
+  slug: auckland-council
+  jurisdiction_type: local_council
