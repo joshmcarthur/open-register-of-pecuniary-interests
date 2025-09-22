@@ -1,15 +1,319 @@
 - name: New Zealand Parliament
   slug: new-zealand-parliament
   jurisdiction_type: parliament
+
 - name: Greater Wellington Regional Council
   slug: greater-wellington-regional-council
   jurisdiction_type: regional_council
+
 - name: Wellington City Council
   slug: wellington-city-council
   jurisdiction_type: local_council
+
+- name: Auckland Council
+  slug: auckland-council
+  jurisdiction_type: local_council
+
+- name: Bay of Plenty Regional Council
+  slug: bay-of-plenty-regional-council
+  jurisdiction_type: regional_council
+
+- name: Carterton District Council
+  slug: carterton-district-council
+  jurisdiction_type: local_council
+
+- name: Central Hawke's Bay District Council
+  slug: central-hawkes-bay-district-council
+  jurisdiction_type: local_council
+
+- name: Far North District Council
+  slug: far-north-district-council
+  jurisdiction_type: local_council
+
+- name: Gisborne District Council
+  slug: gisborne-district-council
+  jurisdiction_type: local_council
+
+- name: Greater Wellington Regional Council
+  slug: greater-wellington-regional-council
+  jurisdiction_type: regional_council
+
+- name: Hamilton City Council
+  slug: hamilton-city-council
+  jurisdiction_type: local_council
+
+- name: Hastings District Council
+  slug: hastings-district-council
+  jurisdiction_type: local_council
+
+- name: Hauraki District Council
+  slug: hauraki-district-council
+  jurisdiction_type: local_council
+
+- name: Hawke's Bay Regional Council
+  slug: hawkes-bay-regional-council
+  jurisdiction_type: regional_council
+
+- name: Horizons Regional Council
+  slug: horizons-regional-council
+  jurisdiction_type: regional_council
+
+- name: Horowhenua District Council
+  slug: horowhenua-district-council
+  jurisdiction_type: local_council
+
+- name: Hutt City Council
+  slug: hutt-city-council
+  jurisdiction_type: local_council
+
+- name: Kaipara District Council
+  slug: kaipara-district-council
+  jurisdiction_type: local_council
+
+- name: Kāpiti Coast District Council
+  slug: kapiti-coast-district-council
+  jurisdiction_type: local_council
+
+- name: Kawerau District Council
+  slug: kawerau-district-council
+  jurisdiction_type: local_council
+
+- name: Manawatu District Council
+  slug: manawatu-district-council
+  jurisdiction_type: local_council
+
+- name: Masterton District Council
+  slug: masterton-district-council
+  jurisdiction_type: local_council
+
+- name: Matamata-Piako District Council
+  slug: matamata-piako-district-council
+  jurisdiction_type: local_council
+
+- name: Napier City Council
+  slug: napier-city-council
+  jurisdiction_type: local_council
+
+- name: New Plymouth District Council
+  slug: new-plymouth-district-council
+  jurisdiction_type: local_council
+
+- name: Northland Regional Council
+  slug: northland-regional-council
+  jurisdiction_type: regional_council
+
+- name: Ōpōtiki District Council
+  slug: opotiki-district-council
+  jurisdiction_type: local_council
+
+- name: Ōtorohanga District Council
+  slug: otorohanga-district-council
+  jurisdiction_type: local_council
+
+- name: Palmerston North City Council
+  slug: palmerston-north-city-council
+  jurisdiction_type: local_council
+
+- name: Porirua City Council
+  slug: porirua-city-council
+  jurisdiction_type: local_council
+
+- name: Rangitīkei District Council
+  slug: rangitikei-district-council
+  jurisdiction_type: local_council
+
+- name: Rotorua Lakes Council
+  slug: rotorua-lakes-council
+  jurisdiction_type: local_council
+
+- name: Ruapehu District Council
+  slug: ruapehu-district-council
+  jurisdiction_type: local_council
+
+- name: South Taranaki District Council
+  slug: south-taranaki-district-council
+  jurisdiction_type: local_council
+
+- name: South Waikato District Council
+  slug: south-waikato-district-council
+  jurisdiction_type: local_council
+
 - name: South Wairarapa District Council
   slug: south-wairarapa-district-council
   jurisdiction_type: local_council
-- name: Auckland Council
-  slug: auckland-council
+
+- name: Stratford District Council
+  slug: stratford-district-council
+  jurisdiction_type: local_council
+
+- name: Taranaki Regional Council
+  slug: taranaki-regional-council
+  jurisdiction_type: regional_council
+
+- name: Tararua District Council
+  slug: tararua-district-council
+  jurisdiction_type: local_council
+
+- name: Taupō District Council
+  slug: taupo-district-council
+  jurisdiction_type: local_council
+
+- name: Tauranga City Council
+  slug: tauranga-city-council
+  jurisdiction_type: local_council
+
+- name: Thames-Coromandel District Council
+  slug: thames-coromandel-district-council
+  jurisdiction_type: local_council
+
+- name: Upper Hutt City Council
+  slug: upper-hutt-city-council
+  jurisdiction_type: local_council
+
+- name: Waikato District Council
+  slug: waikato-district-council
+  jurisdiction_type: local_council
+
+- name: Waikato Regional Council
+  slug: waikato-regional-council
+  jurisdiction_type: regional_council
+
+- name: Waipā District Council
+  slug: waipa-district-council
+  jurisdiction_type: local_council
+
+- name: Wairoa District Council
+  slug: wairoa-district-council
+  jurisdiction_type: local_council
+
+- name: Waitomo District Council
+  slug: waitomo-district-council
+  jurisdiction_type: local_council
+
+- name: Western Bay of Plenty District Council
+  slug: western-bay-of-plenty-district-council
+  jurisdiction_type: local_council
+
+- name: Whakatāne District Council
+  slug: whakatane-district-council
+  jurisdiction_type: local_council
+
+- name: Whanganui District Council
+  slug: whanganui-district-council
+  jurisdiction_type: local_council
+
+- name: Whangarei District Council
+  slug: whangarei-district-council
+  jurisdiction_type: local_council
+
+- name: Ashburton District Council
+  slug: ashburton-district-council
+  jurisdiction_type: local_council
+
+- name: Buller District Council
+  slug: buller-district-council
+  jurisdiction_type: local_council
+
+- name: Central Otago District Council
+  slug: central-otago-district-council
+  jurisdiction_type: local_council
+
+- name: Chatham Islands Council
+  slug: chatham-islands-council
+  jurisdiction_type: local_council
+
+- name: Christchurch City Council
+  slug: christchurch-city-council
+  jurisdiction_type: local_council
+
+- name: Clutha District Council
+  slug: clutha-district-council
+  jurisdiction_type: local_council
+
+- name: Dunedin City Council
+  slug: dunedin-city-council
+  jurisdiction_type: local_council
+
+- name: Environment Canterbury
+  slug: environment-canterbury
+  jurisdiction_type: regional_council
+
+- name: Environment Southland
+  slug: environment-southland
+  jurisdiction_type: regional_council
+
+- name: Gore District Council
+  slug: gore-district-council
+  jurisdiction_type: local_council
+
+- name: Grey District Council
+  slug: grey-district-council
+  jurisdiction_type: local_council
+
+- name: Hurunui District Council
+  slug: hurunui-district-council
+  jurisdiction_type: local_council
+
+- name: Invercargill City Council
+  slug: invercargill-city-council
+  jurisdiction_type: local_council
+
+- name: Kaikōura District Council
+  slug: kaikoura-district-council
+  jurisdiction_type: local_council
+
+- name: Mackenzie District Council
+  slug: mackenzie-district-council
+  jurisdiction_type: local_council
+
+- name: Marlborough District Council
+  slug: marlborough-district-council
+  jurisdiction_type: local_council
+
+- name: Nelson City Council
+  slug: nelson-city-council
+  jurisdiction_type: local_council
+
+- name: Otago Regional Council
+  slug: otago-regional-council
+  jurisdiction_type: regional_council
+
+- name: Queenstown Lakes District Council
+  slug: queenstown-lakes-district-council
+  jurisdiction_type: local_council
+
+- name: Selwyn District Council
+  slug: selwyn-district-council
+  jurisdiction_type: local_council
+
+- name: Southland District Council
+  slug: southland-district-council
+  jurisdiction_type: local_council
+
+- name: Tasman District Council
+  slug: tasman-district-council
+  jurisdiction_type: local_council
+
+- name: Timaru District Council
+  slug: timaru-district-council
+  jurisdiction_type: local_council
+
+- name: Waimakariri District Council
+  slug: waimakariri-district-council
+  jurisdiction_type: local_council
+
+- name: Waimate District Council
+  slug: waimate-district-council
+  jurisdiction_type: local_council
+
+- name: Waitaki District Council
+  slug: waitaki-district-council
+  jurisdiction_type: local_council
+
+- name: West Coast Regional Council
+  slug: west-coast-regional-council
+  jurisdiction_type: regional_council
+
+- name: Westland District Council
+  slug: westland-district-council
   jurisdiction_type: local_council
