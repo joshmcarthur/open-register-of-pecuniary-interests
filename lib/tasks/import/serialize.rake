@@ -176,6 +176,9 @@ namespace :import do
   def extract_individual_data_from_pdf(name, pdf_path)
     prompt = <<~PROMPT
       I have a PDF containing the financial interests information for an individual from a Register of Pecuniary Interests.
+      The PDF could contain partial data for another individual.
+      In the case where it does, only include the data for the individual in the JSON object - these would be items that
+      follow the individual's name or page header in the document.
 
       Please analyze this PDF and extract the following information into a JSON object:
 
