@@ -1,8 +1,9 @@
 namespace :import do
-  desc "Import political entities and interests from JSONL file"
-  task :json, [ :file, :source, :jurisdiction, :role ] => :environment do |t, args|
+  desc "Import political entities and interests from JSONL file. Creates individual sources with file attachments when source_file exists, or falls back to a single source."
+  task :json, [ :file, :source_name, :source_year, :jurisdiction, :role ] => :environment do |t, args|
     file_path = Rails.root.join(args[:file] || ENV["JSONL_FILE"])
-    source_id = args[:source] || ENV["SOURCE"] || (raise ArgumentError.new("SOURCE is required"))
+    source_name = args[:source_name] || ENV["SOURCE_NAME"] || (raise ArgumentError.new("SOURCE_NAME is required"))
+    source_year = args[:source_year] || ENV["SOURCE_YEAR"] || (raise ArgumentError.new("SOURCE_YEAR is required"))
     jurisdiction_id = args[:jurisdiction] || ENV["JURISDICTION"] || raise(ArgumentError.new("JURISDICTION is required"))
     role = args[:role] || ENV["ROLE"] || raise(ArgumentError.new("ROLE is required"))
 
@@ -13,7 +14,6 @@ namespace :import do
 
     puts "Starting import from #{file_path}..."
 
-    source = Source.find_by!(id: source_id)
     jurisdiction = Jurisdiction.find_by(id: jurisdiction_id) || Jurisdiction.find_by!(slug: jurisdiction_id)
 
     # Get all interest categories for quick lookup
@@ -34,15 +34,23 @@ namespace :import do
         # Parse the JSON line
         data = JSON.parse(line.strip)
 
-        # Skip if it's an array (the file starts with [)
-        next if data.is_a?(Array)
-
         # Extract political entity information
         entity_name = data["name"]
         party = data["party"]
         electorate = data["electorate"]
-
+        source_file = data["source_file"] ? Rails.root.join("tmp", data["source_file"]) : nil
         next unless entity_name.present?
+
+        source = if source_file&.exist?
+          Source.create!(name: "#{source_name} - #{entity_name}", year: source_year).tap do |s|
+            s.file.attach(
+              io: source_file.open,
+              filename: source_file.basename,
+              content_type: "application/pdf")
+          end
+        else
+          Source.where(name: source_name, year: source_year).first_or_create!
+        end
 
         # Create or find political entity
         political_entity = PoliticalEntity.find_or_create_by(name: entity_name)
@@ -93,7 +101,7 @@ namespace :import do
               political_entity_jurisdiction: political_entity_jurisdiction,
               interest_category: interest_category,
               source_page_numbers: data["source_page_numbers"],
-              source: source
+              source:
             )
 
             if interest.persisted? && interest.previously_new_record?
@@ -119,6 +127,8 @@ namespace :import do
     puts "Political Entities: #{imported_entities} imported, #{skipped_entities} skipped"
     puts "Political Entity Jurisdictions: #{imported_jurisdictions} imported, #{skipped_jurisdictions} skipped"
     puts "Interests: #{imported_interests} imported, #{skipped_interests} skipped"
+    puts "Sources created: #{created_sources.size} individual sources with file attachments"
+    puts "Fallback source created: #{fallback_source ? 'Yes' : 'No'}"
     puts "Total records processed: #{imported_entities + imported_jurisdictions + imported_interests}"
   end
 end
