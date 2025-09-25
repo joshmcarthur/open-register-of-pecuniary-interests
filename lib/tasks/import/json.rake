@@ -22,6 +22,7 @@ namespace :import do
     imported_entities = 0
     imported_jurisdictions = 0
     imported_interests = 0
+    imported_sources = 0
     skipped_entities = 0
     skipped_jurisdictions = 0
     skipped_interests = 0
@@ -42,7 +43,7 @@ namespace :import do
         next unless entity_name.present?
 
         source = if source_file&.exist?
-          Source.create!(name: "#{source_name} - #{entity_name}", year: source_year).tap do |s|
+          Source.where(name: "#{source_name} - #{entity_name}", year: source_year).first_or_create!.tap do |s|
             s.file.attach(
               io: source_file.open,
               filename: source_file.basename,
@@ -51,6 +52,8 @@ namespace :import do
         else
           Source.where(name: source_name, year: source_year).first_or_create!
         end
+
+        imported_sources += 1
 
         # Create or find political entity
         political_entity = PoliticalEntity.find_or_create_by(name: entity_name)
@@ -127,8 +130,7 @@ namespace :import do
     puts "Political Entities: #{imported_entities} imported, #{skipped_entities} skipped"
     puts "Political Entity Jurisdictions: #{imported_jurisdictions} imported, #{skipped_jurisdictions} skipped"
     puts "Interests: #{imported_interests} imported, #{skipped_interests} skipped"
-    puts "Sources created: #{created_sources.size} individual sources with file attachments"
-    puts "Fallback source created: #{fallback_source ? 'Yes' : 'No'}"
-    puts "Total records processed: #{imported_entities + imported_jurisdictions + imported_interests}"
+    puts "Sources created: #{imported_sources}"
+    puts "Total records processed: #{imported_entities + imported_jurisdictions + imported_interests + imported_sources}"
   end
 end
