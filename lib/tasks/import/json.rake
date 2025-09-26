@@ -39,6 +39,7 @@ namespace :import do
         entity_name = data["name"]
         party = data["party"]
         electorate = data["electorate"]
+        entity_role = data["role"] || role
         source_file = data["source_file"] ? Rails.root.join("tmp", data["source_file"]) : nil
         next unless entity_name.present?
 
@@ -71,7 +72,7 @@ namespace :import do
           political_entity: political_entity,
           jurisdiction: jurisdiction
         ) do |pej|
-          pej.role = role
+          pej.role = entity_role
           pej.electorate = electorate
           pej.affiliation = affiliation
         end

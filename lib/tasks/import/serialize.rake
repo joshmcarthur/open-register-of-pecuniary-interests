@@ -67,6 +67,7 @@ namespace :import do
         name: { type: "string" },
         party: { type: "string" },
         electorate: { type: "string" },
+        role: { type: "string" },
         sections: { type: "array", items: {
           type: "object",
           properties: {
@@ -185,6 +186,7 @@ namespace :import do
       Required fields:
       - name: The individual's full name
       - party: Their political party
+      - role: Their role in the organisation, when available
       - electorate: Their electorate or "List" if they're a list MP
       - sections: An object containing their financial interests organized by category
 
